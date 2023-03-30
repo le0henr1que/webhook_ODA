@@ -1,5 +1,10 @@
-import dotenv from 'dotenv';
-import env from "./config/config"
 
+import env from "./config/environment/config"
 
-console.log(env.odaAccessToken) 
+import { app } from "./app";
+
+const PORT = env.port || 5000;
+
+app.listen(PORT, () => {
+  console.log(`Running at http://localhost:${PORT}`);
+});
