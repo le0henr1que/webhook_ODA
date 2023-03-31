@@ -8,10 +8,17 @@ export class ProcessWebhookController {
 
   async handle(request: Request, response: Response): Promise<Response> {
     const payload = request.body;
+    const webhookController = new WebhookUseCase()
 
+    const responseWpp = await this.processWebhook.handleWebhook(payload);
+    const responseBind = await this.processWebhook.handleWebhook.bind(responseWpp)
+    console.log(responseWpp)
 
-    const responseWpp = await this.processWebhook.execute(payload);
-    console.log(responseWpp.data)
-    return response.status(201).json({ error: false, data:{responseWpp}});
+    if(responseWpp){
+      return response.sendStatus(200);
+    }
+    if(!responseWpp){
+      return response.sendStatus(404);
+    }
   }
 }
