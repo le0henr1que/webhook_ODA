@@ -18,7 +18,7 @@ export class VerifyCallbackController {
       challange, 
       token
     }
-    // console.log(callbackApiSide)
+  
 
     const responseCallback = await this.verifyCallback.execute(callbackApiSide);
 
