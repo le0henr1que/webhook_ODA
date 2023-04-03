@@ -32,22 +32,24 @@ export class WebhookUseCase {
     console.log(recievedMessage.messagePayload.text);
 
     const { phon_no_id, from } = this;
-    const token = 'your-access-token';
+    const token = env.whatsappToken;
 
-    await axios({
-      method: 'POST',
-      url: `https://graph.facebook.com/v13.0/${phon_no_id}/messages?access_token=${token}`,
-      data: {
-        messaging_product: 'whatsapp',
-        to: from,
-        text: {
-          body: recievedMessage.messagePayload.text
+    axios.post('https://graph.facebook.com/v16.0/108061832249283/messages', {
+      messaging_product: 'whatsapp',
+      to: '5511993074751',
+      type: 'template',
+      template: {
+        name: 'hello_world',
+        language: {
+          code: 'en_US'
         }
-      },
+      }
+    }, {
       headers: {
+        'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
       }
-    });
+    })
   }
 
   public async handleWebhook(payload:any):Promise<boolean> {
