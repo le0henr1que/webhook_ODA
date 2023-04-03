@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev:server": "tsnd src/server.ts"
+    "dev:server": "tsnd src/server.ts",
+    "start": "node dist/server.js",
+    "build": "tsc --project tsconfig.json"
   },
   "author": "",
   "license": "ISC",
