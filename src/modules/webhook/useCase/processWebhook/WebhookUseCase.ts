@@ -4,7 +4,7 @@ import env from "../../../../config/environment/config"
 import axios from 'axios';
 import OracleBot from '@oracle/bots-node-sdk';
 import { WebhookConfig } from "../../../../@types";
-import e from "express";
+
 
 const { WebhookClient, WebhookEvent } = OracleBot.Middleware;
 
@@ -27,6 +27,7 @@ export class WebhookUseCase {
     this.webhook.on(WebhookEvent.MESSAGE_RECEIVED, this.handleMessageReceived.bind(this));
   }
 
+
   private async handleMessageReceived(recievedMessage:any) {
     console.log('Received a message from ODA, processing message before sending to WhatsApp. *****************>');
     console.log(recievedMessage.messagePayload.text);
@@ -36,7 +37,7 @@ export class WebhookUseCase {
 
     axios.post('https://graph.facebook.com/v16.0/108061832249283/messages', {
       messaging_product: 'whatsapp',
-      to: '5511993074751',
+      to: from,
       text: {
         body: recievedMessage.messagePayload.text
       }
@@ -53,10 +54,10 @@ export class WebhookUseCase {
     console.log("entrou")
     
     let body_param = payload;
-
-    console.log(JSON.stringify(body_param, null, 2));
+    // console.log(JSON.stringify(body_param, null, 2));
+    console.log(body_param.object)
+    console.log("teste")
     if (body_param.object) {
-
       console.log('Ansh i am inside body');
       if (
         body_param.entry &&
@@ -66,6 +67,7 @@ export class WebhookUseCase {
       ) {
         this.phon_no_id = body_param.entry[0].changes[0].value.metadata.phone_number_id;
         this.from = body_param.entry[0].changes[0].value.messages[0].from;
+        
         let msg_body = body_param.entry[0].changes[0].value.messages[0].text.body;
         let userName = body_param.entry[0].changes[0].value.contacts[0].profile.name;
         console.log('Ansh i am inside details -------------------------------------->');
@@ -80,16 +82,21 @@ export class WebhookUseCase {
           profile: { firstName: userName, lastName: this.from },
           messagePayload: MessageModel.textConversationMessage(msg_body)
         };
-        console.log('Ansh your Message before sending to ODA is ------>' + message);
+        console.log('Ansh your Message before sending to ODA is ------>');
+        console.log(this.webhook)
+
         await this.webhook.send(message);
+        
         // res.sendStatus(200);
         return true
 
       } 
 
+      console.log("Side")
       return false
       
     }
+    console.log("Outside")
     return false
   }
    

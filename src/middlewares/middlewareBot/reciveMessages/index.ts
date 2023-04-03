@@ -19,6 +19,7 @@ export function receiveBotMessage(
         secret: env.secretWebhookClient
       }
     }
+    // console.log(env.secretWebhookClient)
     
     const webhook = new WebhookClient(webhookChannel);
   

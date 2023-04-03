@@ -13,7 +13,7 @@ defineRouterWebhook.post("/webhook", resolver((request, response) => {
   })
 );
 
-defineRouterWebhook.post("/bot/message", receiveBotMessage, handleBotResponse)
+defineRouterWebhook.post("/bot/message", handleBotResponse)
 
 defineRouterWebhook.get("/webhook", resolver((request, response) => {
     return verifyCallbackController.handle(request, response);

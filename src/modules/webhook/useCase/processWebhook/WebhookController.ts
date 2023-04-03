@@ -8,7 +8,11 @@ export class ProcessWebhookController {
 
   async handle(request: Request, response: Response): Promise<Response> {
     const payload = request.body;
-    const webhookController = new WebhookUseCase()
+    console.log("Payload -->")
+    console.log(payload)
+    console.log(JSON.stringify(payload))
+    console.log(payload.entry[0].changes)
+    // const webhookController = new WebhookUseCase()
 
     const responseWpp = await this.processWebhook.handleWebhook(payload);
     const responseBind = await this.processWebhook.handleWebhook.bind(responseWpp)
@@ -21,4 +25,5 @@ export class ProcessWebhookController {
       return response.sendStatus(404);
     }
   }
+
 }
