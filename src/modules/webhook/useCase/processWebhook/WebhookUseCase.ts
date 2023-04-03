@@ -37,13 +37,10 @@ export class WebhookUseCase {
     axios.post('https://graph.facebook.com/v16.0/108061832249283/messages', {
       messaging_product: 'whatsapp',
       to: '5511993074751',
-      type: 'template',
-      template: {
-        name: 'hello_world',
-        language: {
-          code: 'en_US'
-        }
+      text: {
+        body: recievedMessage.messagePayload.text
       }
+      
     }, {
       headers: {
         'Authorization': `Bearer ${token}`,
