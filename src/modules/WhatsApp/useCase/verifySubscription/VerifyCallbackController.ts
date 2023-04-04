@@ -1,7 +1,6 @@
 import { Response, Request } from "express";
 import { HttpError } from "../../../../shared/error/appError";
 import { VerifyCallbackUseCase } from "./VerifyCallbackUseCase";
-import api from "../../../../service/api"
 import { callbackFromApiSide } from "../../../../@types";
 
 export class VerifyCallbackController {

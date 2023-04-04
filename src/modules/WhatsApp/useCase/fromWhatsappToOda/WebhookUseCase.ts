@@ -1,5 +1,4 @@
 
-import api from "../../../../service/api"
 import env from "../../../../config/environment/config"
 import axios from 'axios';
 import OracleBot from '@oracle/bots-node-sdk';
@@ -20,35 +19,12 @@ export class WebhookUseCase {
         secret: env.secretWebhookClient
       }
     }
-    
+    //@ts-ignore
     this.webhook = new WebhookClient(webhookChannel);
-  
-
-    this.webhook.on(WebhookEvent.MESSAGE_RECEIVED, this.handleMessageReceived.bind(this));
   }
 
 
-  private async handleMessageReceived(recievedMessage:any) {
-    console.log('Received a message from ODA, processing message before sending to WhatsApp. *****************>');
-    console.log(recievedMessage.messagePayload.text);
-
-    const { phon_no_id, from } = this;
-    const token = env.whatsappToken;
-
-    axios.post('https://graph.facebook.com/v16.0/108061832249283/messages', {
-      messaging_product: 'whatsapp',
-      to: from,
-      text: {
-        body: recievedMessage.messagePayload.text
-      }
-      
-    }, {
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      }
-    })
-  }
+ 
 
   public async handleWebhook(payload:any):Promise<boolean> {
     console.log("entrou")
