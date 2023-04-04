@@ -2,9 +2,9 @@ import express from "express";
 import cors from "cors";
 import { errorMiddleware } from "./middlewares/error/errorMiddleware";
 import { corsOptions } from "./config/cors/config";
-import OracleBot from "@oracle/bots-node-sdk"
-import { oracleRouter } from "./modules/Oracle-sdk"
-import { whatsappRouter } from "./modules/WhatsApp"
+import OracleBot from "@oracle/bots-node-sdk";
+import { oracleRouter } from "./modules/Oracle-sdk";
+import { whatsappRouter } from "./modules/WhatsApp";
 import morgan from "morgan";
 
 const app = express();

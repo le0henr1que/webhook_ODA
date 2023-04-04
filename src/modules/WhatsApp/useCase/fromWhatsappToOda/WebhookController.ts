@@ -2,28 +2,23 @@ import { Response, Request } from "express";
 import { HttpError } from "../../../../shared/error/appError";
 import { WebhookUseCase } from "./WebhookUseCase";
 
-
 export class ProcessWebhookController {
   constructor(private processWebhook: WebhookUseCase) {}
 
   async handle(request: Request, response: Response): Promise<Response> {
     const payload = request.body;
-    console.log("Payload -->")
-    console.log(payload)
-    console.log(JSON.stringify(payload))
-    console.log(payload.entry[0].changes)
-    // const webhookController = new WebhookUseCase()
 
     const responseWpp = await this.processWebhook.handleWebhook(payload);
-    const responseBind = await this.processWebhook.handleWebhook.bind(responseWpp)
-    console.log(responseWpp)
+    const responseBind = await this.processWebhook.handleWebhook.bind(
+      responseWpp
+    );
+    console.log(responseWpp);
 
-    if(responseWpp){
+    if (responseWpp) {
       return response.sendStatus(200);
     }
-    if(!responseWpp){
+    if (!responseWpp) {
       return response.sendStatus(404);
     }
   }
-
 }

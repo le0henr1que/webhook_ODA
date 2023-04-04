@@ -1,5 +1,4 @@
-
-import env from "./config/environment/config"
+import env from "./config/environment/config";
 
 import { app } from "./app";
 
