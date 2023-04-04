@@ -12,7 +12,6 @@ export class ProcessWebhookController {
     const responseBind = await this.processWebhook.handleWebhook.bind(
       responseWpp
     );
-    console.log(responseWpp);
 
     if (responseWpp) {
       return response.sendStatus(200);

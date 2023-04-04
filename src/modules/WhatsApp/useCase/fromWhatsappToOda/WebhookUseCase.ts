@@ -11,7 +11,7 @@ export let from: string;
 
 export class WebhookUseCase {
   public async handleWebhook(payload: any): Promise<boolean> {
-    console.log("entrou");
+
     const webhook: any = await WebhookOracleSdk();
 
     if (!payload.object) return false;
