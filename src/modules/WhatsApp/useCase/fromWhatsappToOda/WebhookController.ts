@@ -14,9 +14,9 @@ export class ProcessWebhookController {
       responseWpp
     );
 
-    console.log(responseBind + "responseBind")
+    console.log(responseBind + " responseBind")
 
-    console.log(responseWpp + "responseWpp")
+    console.log(responseWpp + " responseWpp")
 
     if (responseWpp) {
       return response.sendStatus(200);
