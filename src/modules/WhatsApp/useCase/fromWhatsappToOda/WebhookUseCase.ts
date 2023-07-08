@@ -3,9 +3,9 @@ import axios from "axios";
 import OracleBot from "@oracle/bots-node-sdk";
 import { WebhookConfig } from "../../../../@types";
 import { WebhookOracleSdk } from "../../../../config/webhookConfig";
+import { json } from "body-parser";
 
 const { WebhookClient, WebhookEvent } = OracleBot.Middleware;
-
 
 export let phon_no_id: string;
 export let from: string;
@@ -21,15 +21,13 @@ export class WebhookUseCase {
     if (!payload.entry[0].changes[0].value.messages) return false;
     if (!payload.entry[0].changes[0].value.messages[0]) return false;
 
-    console.log(payload.entry[0].changes)
-
     phon_no_id = payload.entry[0].changes[0].value.metadata.phone_number_id;
     from = payload.entry[0].changes[0].value.messages[0].from;
 
     let msg_body = payload.entry[0].changes[0].value.messages[0].text.body;
     let userName = payload.entry[0].changes[0].value.contacts[0].profile.name;
-    console.log(phon_no_id)
-    console.log(from)
+
+    console.log(JSON.stringify(payload))
 
     //Sending Message from Whats app to ODA
     const MessageModel = webhook.MessageModel();
@@ -42,12 +40,6 @@ export class WebhookUseCase {
 
     await webhook.send(message);
 
-    const infoUser:any = {
-      phon_no_id, 
-      from
-    }
-    console.log(infoUser)
-
-    return infoUser;
+    return true;
   }
 }

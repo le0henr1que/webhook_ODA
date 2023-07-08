@@ -23,7 +23,7 @@ export function handleBotResponse(
       console.log("Webhook Error:", err.message);
     })
     .on(WebhookEvent.MESSAGE_SENT, (message: any) => {
-      console.log("Message to chatbot BOOTBOOT:", message);
+      console.log("Message to chatbot BOOT-BOOT:", message);
     })
     .on(
       WebhookEvent.MESSAGE_RECEIVED,
