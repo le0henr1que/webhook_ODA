@@ -6,6 +6,7 @@ import { WebhookOracleSdk } from "../../../../config/webhookConfig";
 
 const { WebhookClient, WebhookEvent } = OracleBot.Middleware;
 
+
 export let phon_no_id: string;
 export let from: string;
 
