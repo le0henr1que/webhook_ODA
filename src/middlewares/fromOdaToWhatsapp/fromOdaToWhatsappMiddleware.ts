@@ -31,7 +31,7 @@ export function handleBotResponse(
         console.log(
           "Received a message from ODA, processing message before sending to WhatsApp."
         );
-
+        console.log(receivedMessage +" mensagem recebida pelo ODA")
         const token = env.whatsappToken;
 
         axios.post(
