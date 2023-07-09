@@ -51,34 +51,42 @@ export function handleBotResponse(
         //     },
         //   }
         // );
-        axios.post(
-          `https://graph.facebook.com/v16.0/${phon_no_id}/messages`,
-          {
-            messaging_product: "whatsapp",
+        try {
+          const payload = {
+            messaging_product: 'whatsapp',
             to: from,
             text: {
               body: receivedMessage.messagePayload.text,
             },
-            quick_replies: [
+            buttons: [
               {
-                content_type: "text",
-                title: "Opção 1",
-                payload: "Opção 1",
+                type: 'postback',
+                title: 'Botão 1',
+                payload: 'payload1',
               },
               {
-                content_type: "text",
-                title: "Opção 2",
-                payload: "Opção 2",
+                type: 'postback',
+                title: 'Botão 2',
+                payload: 'payload2',
               },
             ],
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
+          };
+      
+          const response = axios.post(
+            `https://graph.facebook.com/v16.0/${phon_no_id}/messages`,
+            payload,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+              },
+            }
+          );
+      
+          // console.log(response.data);
+        } catch (error) {
+          console.error('Erro ao enviar a mensagem:', error);
+        }
       }
     );
 
