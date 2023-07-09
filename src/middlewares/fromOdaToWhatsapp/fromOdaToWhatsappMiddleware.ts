@@ -31,7 +31,7 @@ export function handleBotResponse(req: Request, res: Response, next: NextFunctio
 
         const contentMessage: any = {
           messaging_product: "whatsapp",
-          to: receivedMessage.number, // Use receivedMessage.number como o valor para "to"
+          to: from, 
         };
 
         const quikReplyInteractive: any = {
@@ -98,7 +98,6 @@ export function handleBotResponse(req: Request, res: Response, next: NextFunctio
         }
 
         const token = env.whatsappToken;
-        const phon_no_id = ""; // Defina o valor correto para "phon_no_id"
 
         axios
           .post(
