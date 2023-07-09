@@ -37,21 +37,21 @@ export function handleBotResponse(
         // console.log(JSON.stringify(receivedMessage))
 
         const contentMessage:any = {
-          messaging_product: "whatsapp",
-          to: from,
+          "messaging_product": "whatsapp",
+          "to": from,
         };
         
         const quikReplyInteractive:any = {
-          type: "button",
-          header: {
-            type: "text",
-            text: "", 
+          "type": "button",
+          "header": {
+            "type": "text",
+            "text": "", 
           },
-          body: {
-            text: receivedMessage.messagePayload.text,
+          "body": {
+            "text": receivedMessage.messagePayload.text,
           },
-          footer: {
-            text: "", 
+          "footer": {
+            "text": "", 
           },
         };
         
@@ -78,6 +78,7 @@ export function handleBotResponse(
         
             quikReplyInteractive.action.buttons.push(button);
           });
+          console.log(quikReplyInteractive)
         }
         if (actionsQuikReply.length > 3) {
           contentMessage.type = "interactive";
@@ -99,6 +100,8 @@ export function handleBotResponse(
         
             quikReplyInteractive.action.sections.push(button);
           });
+          console.log(quikReplyInteractive)
+
         }
 
         const token = env.whatsappToken;
