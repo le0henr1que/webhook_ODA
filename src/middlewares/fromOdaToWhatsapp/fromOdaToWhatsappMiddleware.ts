@@ -31,10 +31,26 @@ export function handleBotResponse(
         console.log(
           "Received a message from ODA, processing message before sending to WhatsApp."
         );
-        console.log("------------------------------>>>>")
+        // console.log("------------------------------>>>>")
         console.log(JSON.stringify(receivedMessage))
         const token = env.whatsappToken;
 
+        // axios.post(
+        //   `https://graph.facebook.com/v16.0/${phon_no_id}/messages`,
+        //   {
+        //     messaging_product: "whatsapp",
+        //     to: from,
+        //     text: {
+        //       body: receivedMessage.messagePayload.text,
+        //     },
+        //   },
+        //   {
+        //     headers: {
+        //       Authorization: `Bearer ${token}`,
+        //       "Content-Type": "application/json",
+        //     },
+        //   }
+        // );
         axios.post(
           `https://graph.facebook.com/v16.0/${phon_no_id}/messages`,
           {
@@ -43,6 +59,18 @@ export function handleBotResponse(
             text: {
               body: receivedMessage.messagePayload.text,
             },
+            quick_replies: [
+              {
+                content_type: "text",
+                title: "Opção 1",
+                payload: "Opção 1",
+              },
+              {
+                content_type: "text",
+                title: "Opção 2",
+                payload: "Opção 2",
+              },
+            ],
           },
           {
             headers: {
