@@ -52,6 +52,8 @@ export function handleBotResponse(req: Request, res: Response, next: NextFunctio
         console.log("-------- quik reply ------->")
         console.log(actionsQuikReply)
         console.log(actionsQuikReply.length)
+        console.log(receivedMessage.messagePayload)
+        console.log(receivedMessage)
         console.log("-------- end------->")
 
         if (actionsQuikReply.length === 0) {
