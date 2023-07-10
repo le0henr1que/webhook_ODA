@@ -35,7 +35,7 @@ export function handleBotResponse(req: Request, res: Response, next: NextFunctio
         };
 
         const interactive: any = {
-          type: "button",
+          type: "list",
           header: {
             type: "text",
             text: "",
@@ -49,6 +49,10 @@ export function handleBotResponse(req: Request, res: Response, next: NextFunctio
         };
 
         const actionsQuikReply = receivedMessage.messagePayload.actions;
+        console.log("-------- quik reply ------->")
+        console.log(actionsQuikReply)
+        console.log(actionsQuikReply.length)
+        console.log("-------- end------->")
 
         if (actionsQuikReply.length === 0) {
           contentMessage.text = { body: receivedMessage.messagePayload.text };
