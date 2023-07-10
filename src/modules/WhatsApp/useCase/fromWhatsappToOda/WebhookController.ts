@@ -8,6 +8,7 @@ export class ProcessWebhookController {
   async handle(request: Request, response: Response): Promise<Response> {
     const payload = request.body;
     console.log(payload)
+    console.log(request)
 
     const responseWpp = await this.processWebhook.handleWebhook(payload);
     const responseBind = await this.processWebhook.handleWebhook.bind(
