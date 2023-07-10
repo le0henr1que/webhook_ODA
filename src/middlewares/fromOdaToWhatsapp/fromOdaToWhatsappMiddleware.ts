@@ -49,15 +49,15 @@ export function handleBotResponse(req: Request, res: Response, next: NextFunctio
         };
 
         
-        const actionsQuikReply = receivedMessage.messagePayload.actions;
+        // const actionsQuikReply = receivedMessage.messagePayload.actions;
         console.log("-------- quik reply ------->")
-        console.log(actionsQuikReply)
-        console.log(actionsQuikReply.length)
-        console.log(receivedMessage.messagePayload)
+        // console.log(receivedMessage.messagePayload.actions)
+        // console.log(receivedMessage.messagePayload.actions.length)
+        // console.log(receivedMessage.messagePayload)
         console.log(receivedMessage)
         console.log("-------- end------->")
 
-        if (!receivedMessage.messagePayload.actions || actionsQuikReply.length === 0) {
+        if (!receivedMessage.messagePayload.actions || receivedMessage.messagePayload.actions.length === 0) {
           contentMessage.text = { body: receivedMessage.messagePayload.text };
         }
 
@@ -81,7 +81,7 @@ export function handleBotResponse(req: Request, res: Response, next: NextFunctio
         //   // console.log(interactive);
         // }
         if (receivedMessage.messagePayload.actions){
-          if (actionsQuikReply.length > 0) {
+          if (receivedMessage.messagePayload.actions.length > 0) {
             contentMessage.type = "interactive";
             interactive.type = "list";
 
@@ -93,7 +93,7 @@ export function handleBotResponse(req: Request, res: Response, next: NextFunctio
               },
             ];
 
-            actionsQuikReply.forEach((content: any) => {
+            receivedMessage.messagePayload.actions.forEach((content: any) => {
               const button: any = {
                 id: content.label,
                 title: " ",
