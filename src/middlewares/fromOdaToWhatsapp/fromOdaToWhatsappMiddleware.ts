@@ -34,7 +34,7 @@ export function handleBotResponse(req: Request, res: Response, next: NextFunctio
           to: from, 
         };
 
-        const quikReplyInteractive: any = {
+        const interactive: any = {
           type: "button",
           header: {
             type: "text",
@@ -56,9 +56,9 @@ export function handleBotResponse(req: Request, res: Response, next: NextFunctio
 
         if (actionsQuikReply.length > 0 && actionsQuikReply.length <= 3) {
           contentMessage.type = "interactive";
-          quikReplyInteractive.type = "button";
+          interactive.type = "button";
 
-          quikReplyInteractive.action = { buttons: [] };
+          interactive.action = { buttons: [] };
 
           actionsQuikReply.forEach((content: any) => {
             const button: any = {
@@ -69,17 +69,17 @@ export function handleBotResponse(req: Request, res: Response, next: NextFunctio
               },
             };
 
-            quikReplyInteractive.action.buttons.push(button);
+            interactive.action.buttons.push(button);
           });
-          console.log(quikReplyInteractive);
+          console.log(interactive);
         }
 
         if (actionsQuikReply.length > 3) {
           contentMessage.type = "interactive";
-          quikReplyInteractive.type = "list";
+          interactive.type = "list";
 
-          quikReplyInteractive.action = { button: "cta-button-content" };
-          quikReplyInteractive.action.sections = [
+          interactive.action = { button: "cta-button-content" };
+          interactive.action.sections = [
             {
               title: receivedMessage.messagePayload.text,
               rows: [],
@@ -89,12 +89,13 @@ export function handleBotResponse(req: Request, res: Response, next: NextFunctio
           actionsQuikReply.forEach((content: any) => {
             const button: any = {
               id: content.label,
-              title: content.label,
+              title: " ",
+              description: content.label
             };
 
-            quikReplyInteractive.action.sections[0].rows.push(button);
+            interactive.action.sections[0].rows.push(button);
           });
-          console.log(quikReplyInteractive);
+          console.log(interactive);
         }
 
         const token = env.whatsappToken;
@@ -102,7 +103,7 @@ export function handleBotResponse(req: Request, res: Response, next: NextFunctio
         axios
           .post(
             `https://graph.facebook.com/v16.0/${phon_no_id}/messages`,
-            { ...contentMessage, quikReplyInteractive },
+            { ...contentMessage, interactive },
             {
               headers: {
                 Authorization: `Bearer ${token}`,
