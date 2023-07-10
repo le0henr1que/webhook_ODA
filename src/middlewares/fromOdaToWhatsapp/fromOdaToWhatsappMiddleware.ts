@@ -71,7 +71,7 @@ export function handleBotResponse(req: Request, res: Response, next: NextFunctio
 
             interactive.action.buttons.push(button);
           });
-          console.log(interactive);
+          // console.log(interactive);
         }
 
         if (actionsQuikReply.length > 3) {
@@ -95,7 +95,7 @@ export function handleBotResponse(req: Request, res: Response, next: NextFunctio
 
             interactive.action.sections[0].rows.push(button);
           });
-          console.log(interactive);
+          // console.log(interactive);
         }
 
         const token = env.whatsappToken;
@@ -117,7 +117,7 @@ export function handleBotResponse(req: Request, res: Response, next: NextFunctio
 
           })
           .catch((error) => {
-            console.log(error)
+            // console.log(error)
             // Lógica para lidar com erros na solicitação POST
           });
       }
