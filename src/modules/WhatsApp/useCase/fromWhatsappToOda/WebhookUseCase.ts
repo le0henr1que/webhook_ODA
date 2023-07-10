@@ -32,9 +32,9 @@ export class WebhookUseCase {
     if(!payload.entry[0].changes[0].value.messages[0].text){
       msg_body = payload.entry[0].changes[0].value.messages[0].interactive.list_reply.description
     }
-    if(!payload.entry[0].changes[0].value.messages[0].interactive.list_reply){
-      msg_body = payload.entry[0].changes[0].value.messages[0].interactive.button_reply.title
-    }
+    // if(!payload.entry[0].changes[0].value.messages[0].interactive.list_reply){
+    //   msg_body = payload.entry[0].changes[0].value.messages[0].interactive.button_reply.title
+    // }
     if(payload.entry[0].changes[0].value.messages[0].text){
       msg_body = payload.entry[0].changes[0].value.messages[0].text.body
     }

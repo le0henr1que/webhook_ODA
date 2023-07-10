@@ -54,27 +54,27 @@ export function handleBotResponse(req: Request, res: Response, next: NextFunctio
           contentMessage.text = { body: receivedMessage.messagePayload.text };
         }
 
-        if (actionsQuikReply.length > 0 && actionsQuikReply.length <= 3) {
-          contentMessage.type = "interactive";
-          interactive.type = "button";
+        // if (actionsQuikReply.length > 0 && actionsQuikReply.length <= 3) {
+        //   contentMessage.type = "interactive";
+        //   interactive.type = "button";
 
-          interactive.action = { buttons: [] };
+        //   interactive.action = { buttons: [] };
 
-          actionsQuikReply.forEach((content: any) => {
-            const button: any = {
-              type: "reply",
-              reply: {
-                id: content.label,
-                title: content.label,
-              },
-            };
+        //   actionsQuikReply.forEach((content: any) => {
+        //     const button: any = {
+        //       type: "reply",
+        //       reply: {
+        //         id: content.label,
+        //         title: content.label,
+        //       },
+        //     };
 
-            interactive.action.buttons.push(button);
-          });
-          // console.log(interactive);
-        }
+        //     interactive.action.buttons.push(button);
+        //   });
+        //   // console.log(interactive);
+        // }
 
-        if (actionsQuikReply.length > 3) {
+        if (actionsQuikReply.length > 0) {
           contentMessage.type = "interactive";
           interactive.type = "list";
 
