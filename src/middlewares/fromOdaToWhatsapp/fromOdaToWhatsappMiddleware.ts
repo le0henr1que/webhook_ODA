@@ -106,10 +106,19 @@ export function handleBotResponse(req: Request, res: Response, next: NextFunctio
           }
         }
         const token = env.whatsappToken;
+        let payloadSend: any = {}
+
+        if(!receivedMessage.messagePayload.actions){
+          payloadSend = contentMessage 
+        }
+        if(receivedMessage.messagePayload.actions){
+          payloadSend = {...contentMessage, interactive} 
+        }
+
         axios
           .post(
             `https://graph.facebook.com/v16.0/${phon_no_id}/messages`,
-            { ...contentMessage, interactive },
+            payloadSend,
             {
               headers: {
                 Authorization: `Bearer ${token}`,
