@@ -113,7 +113,7 @@ export function handleBotResponse(req: Request, res: Response, next: NextFunctio
           )
           .then((response) => {
             // Lógica para lidar com a resposta da solicitação POST
-            console.log(response)
+            // console.log(response)
 
           })
           .catch((error) => {
