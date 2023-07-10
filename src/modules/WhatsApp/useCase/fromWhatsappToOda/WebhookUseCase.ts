@@ -27,7 +27,8 @@ export class WebhookUseCase {
     let msg_body = payload.entry[0].changes[0].value.messages[0].text.body;
     let userName = payload.entry[0].changes[0].value.contacts[0].profile.name;
 
-    console.log(JSON.stringify(payload))
+    console.log(JSON.stringify( payload.entry[0].changes[0].value.messages[0]))
+    console.log(JSON.stringify( payload.entry[0].changes[0].value.messages[0].text))
 
     //Sending Message from Whats app to ODA
     const MessageModel = webhook.MessageModel();
