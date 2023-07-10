@@ -11,6 +11,7 @@ export class ProcessWebhookController {
     console.log(payload)
     console.log(request.params)
     console.log(JSON.stringify(payload.entry[0].changes))
+    console.log(JSON.stringify(payload.entry))
 
     console.log("---------------> end ---")
 

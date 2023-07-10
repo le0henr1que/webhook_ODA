@@ -21,11 +21,21 @@ export class WebhookUseCase {
     if (!payload.entry[0].changes[0].value.messages) return false;
     if (!payload.entry[0].changes[0].value.messages[0]) return false;
 
+    
     phon_no_id = payload.entry[0].changes[0].value.metadata.phone_number_id;
+    
     from = payload.entry[0].changes[0].value.messages[0].from;
 
-    let msg_body = payload.entry[0].changes[0].value.messages[0].text.body;
+    let msg_body = "";
     let userName = payload.entry[0].changes[0].value.contacts[0].profile.name;
+    
+    if(!payload.entry[0].changes[0].value.messages[0].text){
+      msg_body = payload.entry[0].changes[0].value.messages[0].interactive.list_reply.description
+    }
+    if(payload.entry[0].changes[0].value.messages[0].text){
+      msg_body = payload.entry[0].changes[0].value.messages[0].text.body
+    }
+    
     console.log("Mensagens -------------------")
     console.log(JSON.stringify(payload.entry[0].changes[0].value.messages[0]))
     console.log(JSON.stringify(payload.entry[0].changes[0].value.messages[0].text))
