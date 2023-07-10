@@ -81,7 +81,7 @@ export function handleBotResponse(req: Request, res: Response, next: NextFunctio
           interactive.action = { button: "cta-button-content" };
           interactive.action.sections = [
             {
-              title: receivedMessage.messagePayload.text,
+              title:" ",
               rows: [],
             },
           ];
