@@ -48,6 +48,7 @@ export function handleBotResponse(req: Request, res: Response, next: NextFunctio
           },
         };
 
+        
         const actionsQuikReply = receivedMessage.messagePayload.actions;
         console.log("-------- quik reply ------->")
         console.log(actionsQuikReply)
@@ -56,7 +57,7 @@ export function handleBotResponse(req: Request, res: Response, next: NextFunctio
         console.log(receivedMessage)
         console.log("-------- end------->")
 
-        if (actionsQuikReply.length === 0) {
+        if (!receivedMessage.messagePayload.actions || actionsQuikReply.length === 0) {
           contentMessage.text = { body: receivedMessage.messagePayload.text };
         }
 
@@ -79,33 +80,32 @@ export function handleBotResponse(req: Request, res: Response, next: NextFunctio
         //   });
         //   // console.log(interactive);
         // }
+        if (receivedMessage.messagePayload.actions){
+          if (actionsQuikReply.length > 0) {
+            contentMessage.type = "interactive";
+            interactive.type = "list";
 
-        if (actionsQuikReply.length > 0) {
-          contentMessage.type = "interactive";
-          interactive.type = "list";
+            interactive.action = { button: "Clique p/ selecionar" };
+            interactive.action.sections = [
+              {
+                title:" ",
+                rows: [],
+              },
+            ];
 
-          interactive.action = { button: "Clique p/ selecionar" };
-          interactive.action.sections = [
-            {
-              title:" ",
-              rows: [],
-            },
-          ];
+            actionsQuikReply.forEach((content: any) => {
+              const button: any = {
+                id: content.label,
+                title: " ",
+                description: content.label
+              };
 
-          actionsQuikReply.forEach((content: any) => {
-            const button: any = {
-              id: content.label,
-              title: " ",
-              description: content.label
-            };
-
-            interactive.action.sections[0].rows.push(button);
-          });
-          // console.log(interactive);
+              interactive.action.sections[0].rows.push(button);
+            });
+            // console.log(interactive);
+          }
         }
-
         const token = env.whatsappToken;
-
         axios
           .post(
             `https://graph.facebook.com/v16.0/${phon_no_id}/messages`,
