@@ -10,6 +10,8 @@ export class ProcessWebhookController {
     console.log("---------------> request do controller ---")
     console.log(payload)
     console.log(request.params)
+    console.log(JSON.stringify(payload.entry[0].changes))
+
     console.log("---------------> end ---")
 
     const responseWpp = await this.processWebhook.handleWebhook(payload);
