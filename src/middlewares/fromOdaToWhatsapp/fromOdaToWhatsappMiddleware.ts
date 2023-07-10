@@ -78,7 +78,7 @@ export function handleBotResponse(req: Request, res: Response, next: NextFunctio
           contentMessage.type = "interactive";
           interactive.type = "list";
 
-          interactive.action = { button: "cta-button-content" };
+          interactive.action = { button: "Clique p/ selecionar" };
           interactive.action.sections = [
             {
               title:" ",
