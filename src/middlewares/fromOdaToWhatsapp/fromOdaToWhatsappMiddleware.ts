@@ -11,30 +11,7 @@ import {
 
 const { WebhookClient, WebhookEvent } = OracleBot.Middleware;
 
-async function sendMessage(payloadSend:any){
-  await axios
-  .post(
-    `https://graph.facebook.com/v16.0/${phon_no_id}/messages`,
-    payloadSend,
-    {
-      headers: {
-        Authorization: `Bearer ${env.whatsappToken}`,
-        "Content-Type": "application/json",
-      },
-    }
-  )
-  .then((response) => {
-    // Lógica para lidar com a resposta da solicitação POST
-    console.log(response)
-
-  })
-  .catch((error) => {
-    console.log(error)
-    // Lógica para lidar com erros na solicitação POST
-  });
-}
-
-export async function handleBotResponse(req: Request, res: Response, next: NextFunction) {
+export function handleBotResponse(req: Request, res: Response, next: NextFunction) {
   const webhook: any = WebhookOracleSdk();
 
   webhook
@@ -46,18 +23,18 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
     })
     .on(
       WebhookEvent.MESSAGE_RECEIVED,
-      async (receivedMessage: {
+      (receivedMessage: {
         number: any;
         messagePayload: { actions: any[]; text: string };
       }) => {
         console.log("Received a message from ODA, processing message before sending to WhatsApp.");
 
-        let contentMessage: any = {
+        const contentMessage: any = {
           messaging_product: "whatsapp",
           to: from, 
         };
 
-        let interactive: any = {
+        const interactive: any = {
           type: "list",
           header: {
             type: "text",
@@ -106,47 +83,30 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
         }
        
           if (receivedMessage.messagePayload.actions.length > 3) {
-
-            await sendMessage(contentMessage)
-
             contentMessage.type = "interactive";
-            interactive.type = "button";
-  
-            interactive.action = { buttons: [] };
+            interactive.type = "list";
 
-            // contentMessage.type = "interactive";
-            // interactive.type = "list";
+            interactive.action = { button: "Clique p/ selecionar" };
+            interactive.action.sections = [
+              {
+                title:" ",
+                rows: [],
+              },
+            ];
 
-            // interactive.action = { button: "Clique p/ selecionar" };
-            // interactive.action.sections = [
-            //   {
-            //     title:" ",
-            //     rows: [],
-            //   },
-            // ];
-
-            receivedMessage.messagePayload.actions.forEach(async (content: any) => {
-              // const button: any = {
-              //   id: content.label,
-              //   title: " ",
-              //   description: content.label
-              // };
-              let button: any = {
-                type: "reply",
-                reply: {
-                  id: content.label,
-                  title: "Selecionar",
-                },
+            receivedMessage.messagePayload.actions.forEach((content: any) => {
+              const button: any = {
+                id: content.label,
+                title: " ",
+                description: content.label
               };
+
               interactive.action.sections[0].rows.push(button);
-              contentMessage.text = { body: content.label };
-              await sendMessage({...contentMessage, interactive} )
-              button = []
             });
             // console.log(interactive);
           }
         }
-   
+        const token = env.whatsappToken;
         let payloadSend: any = {}
 
         if(!receivedMessage.messagePayload.actions){
@@ -156,7 +116,26 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
           payloadSend = {...contentMessage, interactive} 
         }
 
-        await sendMessage(sendMessage)
+        axios
+          .post(
+            `https://graph.facebook.com/v16.0/${phon_no_id}/messages`,
+            payloadSend,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+              },
+            }
+          )
+          .then((response) => {
+            // Lógica para lidar com a resposta da solicitação POST
+            // console.log(response)
+
+          })
+          .catch((error) => {
+            // console.log(error)
+            // Lógica para lidar com erros na solicitação POST
+          });
       }
     );
 
