@@ -29,18 +29,14 @@ export class WebhookUseCase {
     let msg_body = "";
     let userName = payload.entry[0].changes[0].value.contacts[0].profile.name;
     console.log(payload.entry[0].changes[0].value.messages[0])
-    
-    if(payload.entry[0].changes[0].value.messages[0].interactive.list_reply){
-      msg_body = payload.entry[0].changes[0].value.messages[0].interactive.list_reply.description
-    }
-    if(payload.entry[0].changes[0].value.messages[0].interactive.button_reply){
-      msg_body = payload.entry[0].changes[0].value.messages[0].interactive.button_reply.title
-    }
-    // if(!payload.entry[0].changes[0].value.messages[0].interactive.list_reply){
-    //   msg_body = payload.entry[0].changes[0].value.messages[0].interactive.button_reply.title
-    // }
-    if(payload.entry[0].changes[0].value.messages[0].text){
-      msg_body = payload.entry[0].changes[0].value.messages[0].text.body
+  
+
+    if (payload.entry[0].changes[0].value.messages[0]?.interactive?.list_reply) {
+      msg_body = payload.entry[0].changes[0].value.messages[0].interactive.list_reply.description;
+    } else if (payload.entry[0].changes[0].value.messages[0]?.interactive?.button_reply) {
+      msg_body = payload.entry[0].changes[0].value.messages[0].interactive.button_reply.title;
+    } else if (payload.entry[0].changes[0].value.messages[0]?.text) {
+      msg_body = payload.entry[0].changes[0].value.messages[0].text.body;
     }
     
     console.log("Mensagens -------------------")
