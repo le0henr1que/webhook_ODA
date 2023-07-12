@@ -11,6 +11,29 @@ import {
 
 const { WebhookClient, WebhookEvent } = OracleBot.Middleware;
 
+function sendMessage(payloadSend:any){
+  axios
+  .post(
+    `https://graph.facebook.com/v16.0/${phon_no_id}/messages`,
+    payloadSend,
+    {
+      headers: {
+        Authorization: `Bearer ${env.whatsappToken}`,
+        "Content-Type": "application/json",
+      },
+    }
+  )
+  .then((response) => {
+    // Lógica para lidar com a resposta da solicitação POST
+    // console.log(response)
+
+  })
+  .catch((error) => {
+    // console.log(error)
+    // Lógica para lidar com erros na solicitação POST
+  });
+}
+
 export function handleBotResponse(req: Request, res: Response, next: NextFunction) {
   const webhook: any = WebhookOracleSdk();
 
@@ -29,12 +52,12 @@ export function handleBotResponse(req: Request, res: Response, next: NextFunctio
       }) => {
         console.log("Received a message from ODA, processing message before sending to WhatsApp.");
 
-        const contentMessage: any = {
+        let contentMessage: any = {
           messaging_product: "whatsapp",
           to: from, 
         };
 
-        const interactive: any = {
+        let interactive: any = {
           type: "list",
           header: {
             type: "text",
@@ -83,30 +106,47 @@ export function handleBotResponse(req: Request, res: Response, next: NextFunctio
         }
        
           if (receivedMessage.messagePayload.actions.length > 3) {
-            contentMessage.type = "interactive";
-            interactive.type = "list";
 
-            interactive.action = { button: "Clique p/ selecionar" };
-            interactive.action.sections = [
-              {
-                title:" ",
-                rows: [],
-              },
-            ];
+            sendMessage(contentMessage)
+
+            contentMessage.type = "interactive";
+            interactive.type = "button";
+  
+            interactive.action = { buttons: [] };
+
+            // contentMessage.type = "interactive";
+            // interactive.type = "list";
+
+            // interactive.action = { button: "Clique p/ selecionar" };
+            // interactive.action.sections = [
+            //   {
+            //     title:" ",
+            //     rows: [],
+            //   },
+            // ];
 
             receivedMessage.messagePayload.actions.forEach((content: any) => {
-              const button: any = {
-                id: content.label,
-                title: " ",
-                description: content.label
+              // const button: any = {
+              //   id: content.label,
+              //   title: " ",
+              //   description: content.label
+              // };
+              let button: any = {
+                type: "reply",
+                reply: {
+                  id: content.label,
+                  title: "Selecionar",
+                },
               };
-
-              interactive.action.sections[0].rows.push(button);
+              contentMessage.text = { body: content.label };
+              sendMessage(button)
+              button = []
+              // interactive.action.sections[0].rows.push(button);
             });
             // console.log(interactive);
           }
         }
-        const token = env.whatsappToken;
+   
         let payloadSend: any = {}
 
         if(!receivedMessage.messagePayload.actions){
@@ -116,26 +156,7 @@ export function handleBotResponse(req: Request, res: Response, next: NextFunctio
           payloadSend = {...contentMessage, interactive} 
         }
 
-        axios
-          .post(
-            `https://graph.facebook.com/v16.0/${phon_no_id}/messages`,
-            payloadSend,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-              },
-            }
-          )
-          .then((response) => {
-            // Lógica para lidar com a resposta da solicitação POST
-            // console.log(response)
-
-          })
-          .catch((error) => {
-            // console.log(error)
-            // Lógica para lidar com erros na solicitação POST
-          });
+        sendMessage(sendMessage)
       }
     );
 
