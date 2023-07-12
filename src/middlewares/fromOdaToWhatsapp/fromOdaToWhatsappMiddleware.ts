@@ -11,8 +11,8 @@ import {
 
 const { WebhookClient, WebhookEvent } = OracleBot.Middleware;
 
-function sendMessage(payloadSend:any){
-  axios
+async function sendMessage(payloadSend:any){
+  await axios
   .post(
     `https://graph.facebook.com/v16.0/${phon_no_id}/messages`,
     payloadSend,
@@ -25,16 +25,16 @@ function sendMessage(payloadSend:any){
   )
   .then((response) => {
     // Lógica para lidar com a resposta da solicitação POST
-    // console.log(response)
+    console.log(response)
 
   })
   .catch((error) => {
-    // console.log(error)
+    console.log(error)
     // Lógica para lidar com erros na solicitação POST
   });
 }
 
-export function handleBotResponse(req: Request, res: Response, next: NextFunction) {
+export async function handleBotResponse(req: Request, res: Response, next: NextFunction) {
   const webhook: any = WebhookOracleSdk();
 
   webhook
@@ -46,7 +46,7 @@ export function handleBotResponse(req: Request, res: Response, next: NextFunctio
     })
     .on(
       WebhookEvent.MESSAGE_RECEIVED,
-      (receivedMessage: {
+      async (receivedMessage: {
         number: any;
         messagePayload: { actions: any[]; text: string };
       }) => {
@@ -107,7 +107,7 @@ export function handleBotResponse(req: Request, res: Response, next: NextFunctio
        
           if (receivedMessage.messagePayload.actions.length > 3) {
 
-            sendMessage(contentMessage)
+            await sendMessage(contentMessage)
 
             contentMessage.type = "interactive";
             interactive.type = "button";
@@ -125,7 +125,7 @@ export function handleBotResponse(req: Request, res: Response, next: NextFunctio
             //   },
             // ];
 
-            receivedMessage.messagePayload.actions.forEach((content: any) => {
+            receivedMessage.messagePayload.actions.forEach(async (content: any) => {
               // const button: any = {
               //   id: content.label,
               //   title: " ",
@@ -139,7 +139,7 @@ export function handleBotResponse(req: Request, res: Response, next: NextFunctio
                 },
               };
               contentMessage.text = { body: content.label };
-              sendMessage(button)
+              await sendMessage(button)
               button = []
               // interactive.action.sections[0].rows.push(button);
             });
@@ -156,7 +156,7 @@ export function handleBotResponse(req: Request, res: Response, next: NextFunctio
           payloadSend = {...contentMessage, interactive} 
         }
 
-        sendMessage(sendMessage)
+        await sendMessage(sendMessage)
       }
     );
 
