@@ -93,16 +93,70 @@ export function handleBotResponse(req: Request, res: Response, next: NextFunctio
                 rows: [],
               },
             ];
-
             receivedMessage.messagePayload.actions.forEach((content: any) => {
               const button: any = {
-                id: content.label,
-                title: " ",
-                description: content.label
+                type: "reply",
+                reply: {
+                  id: content.label,
+                  title: "Selecionar",
+                },
               };
+            
+              interactive.action.buttons.push(button);
+            
+              const payloadSend: any = {
+                messaging_product: "whatsapp",
+                to: from,
+                type: "interactive",
+                interactive: {
+                  type: "button",
+                  header: {
+                    type: "text",
+                    text: "",
+                  },
+                  body: {
+                    text: content.label,
+                  },
+                  footer: {
+                    text: "",
+                  },
+                  action: {
+                    buttons: [button],
+                  },
+                },
+              };
+            
+       
+              axios
+              .post(
+                `https://graph.facebook.com/v16.0/${phon_no_id}/messages`,
+                payloadSend,
+                {
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                  },
+                }
+              )
+              .then((response) => {
+                // Lógica para lidar com a resposta da solicitação POST
+                // console.log(response)
 
-              interactive.action.sections[0].rows.push(button);
+              })
+              .catch((error) => {
+                // console.log(error)
+                // Lógica para lidar com erros na solicitação POST
+              });
             });
+            // receivedMessage.messagePayload.actions.forEach((content: any) => {
+            //   const button: any = {
+            //     id: content.label,
+            //     title: " ",
+            //     description: content.label
+            //   };
+
+            //   interactive.action.sections[0].rows.push(button);
+            // });
             // console.log(interactive);
           }
         }
