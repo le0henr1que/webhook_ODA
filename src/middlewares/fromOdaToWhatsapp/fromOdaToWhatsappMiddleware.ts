@@ -139,7 +139,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
                 },
               };
               contentMessage.text = { body: content.label };
-              await sendMessage(button)
+              await sendMessage({...contentMessage, interactive} )
               button = []
               // interactive.action.sections[0].rows.push(button);
             });
