@@ -11,6 +11,30 @@ import {
 
 const { WebhookClient, WebhookEvent } = OracleBot.Middleware;
 
+async function sendMensagemFromWhatsapp(payloadSend:any){
+
+  await axios
+  .post(
+    `https://graph.facebook.com/v16.0/${phon_no_id}/messages`,
+    payloadSend,
+    {
+      headers: {
+        Authorization: `Bearer ${env.whatsappToken}`,
+        "Content-Type": "application/json",
+      },
+    }
+  )
+  .then((response) => {
+    // Lógica para lidar com a resposta da solicitação POST
+    // console.log(response)
+
+  })
+  .catch((error) => {
+    // console.log(error)
+    // Lógica para lidar com erros na solicitação POST
+  });
+}
+
 export function handleBotResponse(req: Request, res: Response, next: NextFunction) {
   const webhook: any = WebhookOracleSdk();
 
@@ -28,12 +52,11 @@ export function handleBotResponse(req: Request, res: Response, next: NextFunctio
         messagePayload: { actions: any[]; text: string };
       }) => {
         console.log("Received a message from ODA, processing message before sending to WhatsApp.");
-
         const contentMessage: any = {
           messaging_product: "whatsapp",
           to: from, 
         };
-
+        
         const interactive: any = {
           type: "list",
           header: {
@@ -47,94 +70,53 @@ export function handleBotResponse(req: Request, res: Response, next: NextFunctio
             text: "",
           },
         };
-
         
-        // const actionsQuikReply = receivedMessage.messagePayload.actions;
-        console.log("-------- quik reply ------->")
-        // console.log(receivedMessage.messagePayload.actions)
-        // console.log(receivedMessage.messagePayload.actions.length)
-        // console.log(receivedMessage.messagePayload)
-        console.log(receivedMessage)
-        console.log("-------- end------->")
-
+        console.log("-------- quick reply ------->");
+        console.log(receivedMessage);
+        console.log("-------- end ------->");
+        
         if (!receivedMessage.messagePayload.actions || receivedMessage.messagePayload.actions.length === 0) {
           contentMessage.text = { body: receivedMessage.messagePayload.text };
         }
-
-        // if (actionsQuikReply.length > 0 && actionsQuikReply.length <= 3) {
-        //   contentMessage.type = "interactive";
-        //   interactive.type = "button";
-
-        //   interactive.action = { buttons: [] };
-
-        //   actionsQuikReply.forEach((content: any) => {
-        //     const button: any = {
-        //       type: "reply",
-        //       reply: {
-        //         id: content.label,
-        //         title: content.label,
-        //       },
-        //     };
-
-        //     interactive.action.buttons.push(button);
-        //   });
-        //   // console.log(interactive);
-        // }
-        if (receivedMessage.messagePayload.actions){
-          if (receivedMessage.messagePayload.actions.length > 0) {
-            contentMessage.type = "interactive";
-            interactive.type = "list";
-
-            interactive.action = { button: "Clique p/ selecionar" };
-            interactive.action.sections = [
-              {
-                title:" ",
-                rows: [],
-              },
-            ];
-
-            receivedMessage.messagePayload.actions.forEach((content: any) => {
-              const button: any = {
+        
+        if (receivedMessage.messagePayload.actions) {
+          contentMessage.type = "interactive";
+          interactive.type = "button";
+          interactive.action = { buttons: [] };
+        
+          receivedMessage.messagePayload.actions.forEach((content: any, index: number) => {
+            const button: any = {
+              type: "reply",
+              reply: {
                 id: content.label,
-                title: " ",
-                description: content.label
+                title: content.label,
+              }
+            };
+        
+            interactive.action.buttons.push(button);
+        
+            // Verifica se já adicionou 3 botões ou se é o último item do loop
+            if (interactive.action.buttons.length === 3 || index === receivedMessage.messagePayload.actions.length - 1) {
+              const payloadSend: any = {
+                ...contentMessage,
+                interactive: { ...interactive },
               };
-
-              interactive.action.sections[0].rows.push(button);
-            });
-            // console.log(interactive);
-          }
-        }
-        const token = env.whatsappToken;
-        let payloadSend: any = {}
-
-        if(!receivedMessage.messagePayload.actions){
-          payloadSend = contentMessage 
-        }
-        if(receivedMessage.messagePayload.actions){
-          payloadSend = {...contentMessage, interactive} 
-        }
-
-        axios
-          .post(
-            `https://graph.facebook.com/v16.0/${phon_no_id}/messages`,
-            payloadSend,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-              },
+        
+              // Verifica se ainda existem botões para serem enviados
+              if (index < receivedMessage.messagePayload.actions.length - 1) {
+                payloadSend.interactive.body.text = "Mais alternativas para escolher:";
+              }
+        
+              sendMensagemFromWhatsapp(payloadSend);
+        
+              // Limpa os botões para a próxima remessa
+              interactive.action.buttons = [];
             }
-          )
-          .then((response) => {
-            // Lógica para lidar com a resposta da solicitação POST
-            // console.log(response)
-
-          })
-          .catch((error) => {
-            // console.log(error)
-            // Lógica para lidar com erros na solicitação POST
           });
+        } else {
+          const payloadSend: any = contentMessage;
+          sendMensagemFromWhatsapp(payloadSend);
+        }
       }
     );
 
