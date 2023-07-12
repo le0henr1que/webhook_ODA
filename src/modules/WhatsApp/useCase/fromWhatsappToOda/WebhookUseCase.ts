@@ -28,6 +28,7 @@ export class WebhookUseCase {
 
     let msg_body = "";
     let userName = payload.entry[0].changes[0].value.contacts[0].profile.name;
+    console.log(payload.entry[0].changes[0].value.messages[0])
     
     if(payload.entry[0].changes[0].value.messages[0].interactive.list_reply){
       msg_body = payload.entry[0].changes[0].value.messages[0].interactive.list_reply.description
