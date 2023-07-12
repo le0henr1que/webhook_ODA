@@ -138,10 +138,10 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
                   title: "Selecionar",
                 },
               };
+              interactive.action.sections[0].rows.push(button);
               contentMessage.text = { body: content.label };
               await sendMessage({...contentMessage, interactive} )
               button = []
-              // interactive.action.sections[0].rows.push(button);
             });
             // console.log(interactive);
           }
