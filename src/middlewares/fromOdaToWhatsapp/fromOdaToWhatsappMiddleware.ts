@@ -52,8 +52,9 @@ export function handleBotResponse(req: Request, res: Response, next: NextFunctio
         // const actionsQuikReply = receivedMessage.messagePayload.actions;
         console.log("-------- quik reply ------->")
         // console.log(receivedMessage.messagePayload.actions)
-        // console.log(receivedMessage.messagePayload.actions.length)
-        // console.log(receivedMessage.messagePayload)
+        console.log(receivedMessage.messagePayload.actions.length)
+        console.log(receivedMessage.messagePayload)
+        console.log(JSON.stringify(receivedMessage))
         console.log(receivedMessage)
         console.log("-------- end------->")
 
@@ -79,7 +80,7 @@ export function handleBotResponse(req: Request, res: Response, next: NextFunctio
 
             interactive.action.buttons.push(button);
           });
-          // console.log(interactive);
+  
         }
        
           if (receivedMessage.messagePayload.actions.length > 3) {
@@ -127,15 +128,7 @@ export function handleBotResponse(req: Request, res: Response, next: NextFunctio
               },
             }
           )
-          .then((response) => {
-            // Lógica para lidar com a resposta da solicitação POST
-            // console.log(response)
-
-          })
-          .catch((error) => {
-            // console.log(error)
-            // Lógica para lidar com erros na solicitação POST
-          });
+        
       }
     );
 
