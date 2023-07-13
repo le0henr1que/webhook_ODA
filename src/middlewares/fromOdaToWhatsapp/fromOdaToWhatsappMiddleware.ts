@@ -52,7 +52,7 @@ export function handleBotResponse(req: Request, res: Response, next: NextFunctio
         // const actionsQuikReply = receivedMessage.messagePayload.actions;
         console.log("-------- quik reply ------->")
         // console.log(receivedMessage.messagePayload.actions)
-        console.log(receivedMessage.messagePayload.actions.length)
+        console.log(receivedMessage.messagePayload.actions)
         console.log(receivedMessage.messagePayload)
         console.log(JSON.stringify(receivedMessage))
         console.log(receivedMessage)
