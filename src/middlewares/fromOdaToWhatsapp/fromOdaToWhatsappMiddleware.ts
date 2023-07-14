@@ -141,7 +141,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
           let valueForSending:any[] = []
           
           if (receivedMessage.messagePayload.actions) {
-            valueForSending = await receivedMessage.messagePayload.actions.map((content: any) => content.label);
+            valueForSending = receivedMessage.messagePayload.actions.map((content: any) => content.label);
           }
 
           valueForSending = ["Cancelar"]
@@ -149,7 +149,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
 
           // await buildPayloadWhatsapp(valueForSending, false)
           // a função a baixo retorna os dados por meio de um botão
-          buildPayloadWhatsapp(valueForSending, true)
+          await buildPayloadWhatsapp(valueForSending, true)
           .then(content => console.log("Mensagem enviada com sucesso!!"))
           .catch((err) => {
             errorMessage()

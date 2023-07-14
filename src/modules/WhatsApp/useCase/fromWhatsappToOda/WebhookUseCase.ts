@@ -39,11 +39,7 @@ export class WebhookUseCase {
       msg_body = payload.entry[0].changes[0].value.messages[0].text.body;
     }
     
-    console.log("Mensagens -------------------")
-    console.log(JSON.stringify(payload.entry[0].changes[0].value.messages[0]))
-    console.log(JSON.stringify(payload.entry[0].changes[0].value.messages[0].text))
-    console.log(JSON.stringify(payload.entry[0].changes[0].value.messages))
-    console.log("Mensagens end --------->")
+
 
     //Sending Message from Whats app to ODA
     const MessageModel = webhook.MessageModel();
