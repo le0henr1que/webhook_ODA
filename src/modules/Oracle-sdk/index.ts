@@ -6,8 +6,8 @@ const oracleRouter = Router();
 
 oracleRouter.post("/bot/message", handleBotResponse);
 
-// oracleRouter.post("simulator/bot/message", handleBotResponse, (request:Request, response:Response) => {
-//     response.send("message send");
-// });
+oracleRouter.post("/simulator/bot/message", handleBotResponse, (request:Request, response:Response) => {
+    response.send("message send");
+});
 
 export { oracleRouter };
