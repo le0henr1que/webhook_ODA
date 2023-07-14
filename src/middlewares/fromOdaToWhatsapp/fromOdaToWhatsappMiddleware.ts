@@ -84,7 +84,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
                 type: "reply",
                 reply: { id: "Selecionar", title: "Selecionar" }
               };
-              console.log(JSON.stringify(contentMessage) );
+          
               contentMessage.interactive.body.text = content
               await sendMessage(contentMessage);
             }
@@ -92,7 +92,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
           }
 
           if(messageList.length <= 3){
-            console.log("Aqui ta caindo, dentro da functin")
+            // console.log("Aqui ta caindo, dentro da functin")
             contentMessage.interactive.type = "button"
             contentMessage.interactive.action.buttons = messageList.map((content) => {
               return {
@@ -116,7 +116,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
                 description: content
               };
             });
-            console.log(JSON.stringify(contentMessage))
+            // console.log(JSON.stringify(contentMessage))
             return sendMessage(contentMessage)
             
           }
@@ -135,6 +135,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
             }]
           sendMessage(contentMessage)
           console.log(`Parece que ocorreu um erro ao enviar a mensagem de: ${from}`)
+          console.log(contentMessage)
         }
     
 
