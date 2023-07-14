@@ -140,10 +140,11 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
 
           let valueForSending:any[] = []
           
-          if (!receivedMessage.messagePayload.actions?.length) {
-            valueForSending = ["Cancelar"]
+          if (receivedMessage.messagePayload.actions) {
+            valueForSending = await receivedMessage.messagePayload.actions.map((content: any) => content.label);
           }
-          valueForSending = await receivedMessage.messagePayload.actions.map((content: any) => content.label);
+
+          valueForSending = ["Cancelar"]
     
 
           // await buildPayloadWhatsapp(valueForSending, false)
