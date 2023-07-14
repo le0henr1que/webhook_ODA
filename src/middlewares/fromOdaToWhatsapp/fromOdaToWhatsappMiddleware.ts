@@ -5,31 +5,31 @@ import { Request, Response, NextFunction } from "express";
 import axios from "axios";
 import { WebhookOracleSdk } from "../../config/webhookConfig/index";
 import { json } from "body-parser";
-// import {
-//   from,
-//   phon_no_id,
-// } from "../../modules/WhatsApp/useCase/fromWhatsappToOda/WebhookUseCase";
+import {
+  from,
+  phon_no_id,
+} from "../../modules/WhatsApp/useCase/fromWhatsappToOda/WebhookUseCase";
 
 const { WebhookClient, WebhookEvent } = OracleBot.Middleware;
 
 
 export async function handleBotResponse(req: Request, res: Response, next: NextFunction) {
-  // const webhook: any = WebhookOracleSdk();
+  const webhook: any = WebhookOracleSdk();
 
-  // webhook
-  //   .on(WebhookEvent.ERROR, (err: { message: any }) => {
-  //     console.log("Webhook Error:", err.message);
-  //   })
-  //   .on(WebhookEvent.MESSAGE_SENT, (message: any) => {
-  //     console.log("Message to chatbot BOOT-BOOT:", message);
-  //   })
-  //   .on(
-  //     WebhookEvent.MESSAGE_RECEIVED,
-  //     (receivedMessage: {
-  //       number: any;
-  //       messagePayload: { actions: any[]; text: string };
-  //     }) => {
-        const { receivedMessage, from, phon_no_id } = req.body
+  webhook
+    .on(WebhookEvent.ERROR, (err: { message: any }) => {
+      console.log("Webhook Error:", err.message);
+    })
+    .on(WebhookEvent.MESSAGE_SENT, (message: any) => {
+      console.log("Message to chatbot BOOT-BOOT:", message);
+    })
+    .on(
+      WebhookEvent.MESSAGE_RECEIVED,
+      async (receivedMessage: {
+        number: any;
+        messagePayload: { actions: any[]; text: string };
+      }) => {
+        // const { receivedMessage, from, phon_no_id } = req.body
 
           async function sendMessage(payload:any){
             return await axios.post(
@@ -158,8 +158,8 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
     
      
         
-      // }
-  //   );
+      }
+    );
 
-  // webhook.receiver()(req, res, next);
+  webhook.receiver()(req, res, next);
 }
