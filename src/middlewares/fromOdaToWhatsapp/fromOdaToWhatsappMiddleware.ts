@@ -70,7 +70,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
           },
         };
         
-        async function buildPayloadWhatsapp(messageList:any, listButton:boolean){
+        async function buildPayloadWhatsapp(messageList:any, listButton:string){
           contentMessage.type = "interactive";
           contentMessage.interactive = interactive;
           contentMessage.interactive.type = "";
@@ -79,7 +79,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
           
           console.log("caiu dentro da build message com o array "+ JSON.stringify(contentMessage))
           
-          if(listButton && messageList.cards ){
+          if(listButton == "list-description" && messageList.cards ){
             
             await sendMessage({  
               messaging_product: "whatsapp",
@@ -111,7 +111,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
             return
           }
 
-          if(listButton && messageList.length > 3){
+          if(listButton == "list-only-button" && messageList.length > 3){
             
             await sendMessage({  
               messaging_product: "whatsapp",
@@ -140,7 +140,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
             return
           }
 
-          if(!listButton && messageList.length <= 3){
+          if(messageList.length <= 3){
             console.log(messageList)
             console.log("Caindo no list menor que três pra bostrar três botões com o array " + JSON.stringify(contentMessage))
             // console.log("Aqui ta caindo, dentro da functin")
@@ -156,7 +156,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
             return sendMessage(contentMessage)
           }
 
-          if(!listButton && messageList.length > 3){
+          if(listButton == "list-for-wpp-list" &&  messageList.length > 3){
             console.log("Caiu no list pra mostrar a lista " + JSON.stringify(contentMessage))
 
             contentMessage.interactive.type = "list"
@@ -209,7 +209,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
         // console.log("AQUI ESTÃO AS ACTIONS");
         // console.log(JSON.stringify(receivedMessage));
         
-        await buildPayloadWhatsapp(valueForSending, true)
+        await buildPayloadWhatsapp(valueForSending, "list-description")
           .then(() => {
             console.log("Mensagem enviada com sucesso!!");
           })
