@@ -72,17 +72,18 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
           contentMessage.interactive = interactive;
           contentMessage.interactive.type = "";
           contentMessage.interactive.action = {};
-
+          contentMessage.interactive.body = {text:receivedMessage.messagePayload.text}
+          
           console.log("caiu dentro da build message com o array "+ JSON.stringify(contentMessage))
           if(listButton && messageList.length > 3){
             
-            // await sendMessage({  
-            //   messaging_product: "whatsapp",
-            //   to: from,
-            //   text: {
-            //     body: receivedMessage.messagePayload.text,
-            //   }
-            // });
+            await sendMessage({  
+              messaging_product: "whatsapp",
+              to: from,
+              text: {
+                body: receivedMessage.messagePayload.text,
+              }
+            });
             // console.log(messageList)
             
             for (const content of messageList) {
@@ -155,14 +156,14 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
           // console.log(JSON.stringify(contentMessage))
         }
     
-          const messageListType = false
 
 
-          let valueForSending: any[] = receivedMessage.messagePayload.actions && messageListType
+
+          let valueForSending: any[] = receivedMessage.messagePayload.actions
           ? receivedMessage.messagePayload.actions.map((content: any) => content.label)
           : ["Cancelar"];
         
-          await buildPayloadWhatsapp(valueForSending, messageListType)
+          await buildPayloadWhatsapp(valueForSending, false)
           .then(() => {
             console.log("Mensagem enviada com sucesso!!");
           })
