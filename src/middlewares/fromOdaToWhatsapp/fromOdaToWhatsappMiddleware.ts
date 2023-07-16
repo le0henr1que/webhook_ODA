@@ -166,7 +166,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
           ? receivedMessage.messagePayload.actions.map((content: any) => content.label)
           : ["Cancelar"];
           console.log("AQUI ESTÁ AS ACTIONS")
-          console.log(receivedMessage.messagePayload.actions)
+          console.log(JSON.stringify(receivedMessage))
         
           await buildPayloadWhatsapp(valueForSending, false)
           .then(() => {
