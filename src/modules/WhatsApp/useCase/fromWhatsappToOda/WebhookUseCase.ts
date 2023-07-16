@@ -15,11 +15,11 @@ export class WebhookUseCase {
 
     const webhook: any = await WebhookOracleSdk();
 
-    if (!payload.object) return false;
-    if (!payload.entry) return false;
-    if (!payload.entry[0].changes) return false;
-    if (!payload.entry[0].changes[0].value.messages) return false;
-    if (!payload.entry[0].changes[0].value.messages[0]) return false;
+    // if (!payload.object) return false;
+    // if (!payload.entry) return false;
+    // if (!payload.entry[0].changes) return false;
+    // if (!payload.entry[0].changes[0].value.messages) return false;
+    // if (!payload.entry[0].changes[0].value.messages[0]) return false;
 
     
     phon_no_id = payload.entry[0].changes[0].value.metadata.phone_number_id;
@@ -37,6 +37,8 @@ export class WebhookUseCase {
       msg_body = payload.entry[0].changes[0].value.messages[0].interactive.button_reply.title;
     } else if (payload.entry[0].changes[0].value.messages[0]?.text) {
       msg_body = payload.entry[0].changes[0].value.messages[0].text.body;
+    }else{
+      return false;
     }
     
 

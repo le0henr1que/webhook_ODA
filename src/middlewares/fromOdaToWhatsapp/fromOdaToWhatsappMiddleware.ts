@@ -15,7 +15,7 @@ const { WebhookClient, WebhookEvent } = OracleBot.Middleware;
 
 export async function handleBotResponse(req: Request, res: Response, next: NextFunction) {
   const webhook: any = WebhookOracleSdk();
-
+  let webhookExecutado = false;
   webhook
     .on(WebhookEvent.ERROR, (err: { message: any }) => {
       console.log("Webhook Error:", err.message);
@@ -30,7 +30,13 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
         messagePayload: { actions: any[]; text: string };
       }) => {
         // const { receivedMessage, from, phon_no_id } = req.body
-
+        function delay(ms: number): Promise<void> {
+          return new Promise((resolve) => setTimeout(resolve, ms));
+        }
+        if (!webhookExecutado) {
+          webhookExecutado = true;
+        }
+        
           async function sendMessage(payload:any){
             return await axios.post(
               `https://graph.facebook.com/v16.0/${phon_no_id}/messages`,
@@ -76,6 +82,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
                 body: receivedMessage.messagePayload.text,
               }
             });
+            console.log(messageList)
             
             for (const content of messageList) {
               contentMessage.interactive.type = "button"
@@ -117,6 +124,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
                 description: content
               };
             });
+            // console.log(messageList)
             // console.log(JSON.stringify(contentMessage))
             return sendMessage(contentMessage)
             
@@ -140,26 +148,45 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
         }
     
 
-          let valueForSending:any[] = []
+          // let valueForSending:any[] = []
           
-          if (receivedMessage.messagePayload.actions) {
-            valueForSending = receivedMessage.messagePayload.actions.map((content: any) => content.label);
-          }
+          // if (receivedMessage.messagePayload.actions) {
+          //   console.log("Existe")
+          //   valueForSending = receivedMessage.messagePayload.actions.map((content: any) => content.label);
+            
+          //   // console.log(valueForSending)
+          // }
 
-          valueForSending = ["Cancelar"]
-    
+          // valueForSending = ["Cancelar"]
+
+          let valueForSending: any[] = receivedMessage.messagePayload.actions
+          ? receivedMessage.messagePayload.actions.map((content: any) => content.label)
+          : ["Cancelar"];
+        
+        buildPayloadWhatsapp(valueForSending, true)
+          .then(() => {
+            console.log("Mensagem enviada com sucesso!!");
+          })
+          .catch((err) => {
+            errorMessage();
+            console.log(err);
+          });
 
           // await buildPayloadWhatsapp(valueForSending, false)
           // a função a baixo retorna os dados por meio de um botão
-          await buildPayloadWhatsapp(valueForSending, true)
-          .then(content => console.log("Mensagem enviada com sucesso!!"))
-          .catch((err) => {
-            errorMessage()
-            console.log(err)
-          })
+          // await buildPayloadWhatsapp(valueForSending, true)
+          // .then(content => console.log("Mensagem enviada com sucesso!!"))
+          // .catch((err) => {
+          //   errorMessage()
+          //   console.log(err)
+          //   console.log(err)
+          // })
 
     
-     
+          if (!webhookExecutado) {
+            await delay(5000);
+            webhookExecutado = false;
+          }
         
       }
     );
