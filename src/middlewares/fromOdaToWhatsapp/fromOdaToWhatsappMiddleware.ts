@@ -102,7 +102,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
               contentMessage.interactive.action.buttons = [{}];
               contentMessage.interactive.action.buttons[0] = {
                 type: "reply",
-                reply: { id: content.actions.label, title: "Selecionar plano" }
+                reply: { id: content.actions[0].label, title: "Selecionar plano" }
               };
               console.log(contentMessage)
               await sendMessage(contentMessage);
