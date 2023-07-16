@@ -156,7 +156,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
         }
     
 
-          // let valueForSending:any[] = []
+          let valueForSending:any[] = []
           
           // if (receivedMessage.messagePayload.actions) {
           //   console.log("Existe")
@@ -167,9 +167,34 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
 
           // valueForSending = ["Cancelar"]
 
-          let valueForSending: any[] = receivedMessage.messagePayload.actions
-          ? receivedMessage.messagePayload.actions.map((content: any) => content.label)
-          : ["Cancelar"];
+          if(receivedMessage.messagePayload.actions){
+            valueForSending = receivedMessage.messagePayload.actions.map((content: any) => content.label);
+            await buildPayloadWhatsapp(valueForSending, false)
+            // console.log("Caiu no build message")
+            .then(() => {
+              console.log("Mensagem enviada com sucesso!!");
+            })
+            .catch((err) => {
+              errorMessage();
+              // console.log(err);
+            });
+          }
+          if(!receivedMessage.messagePayload.actions){
+            valueForSending = ["Cancelar"]
+
+            await buildPayloadWhatsapp(valueForSending, false)
+            // console.log("Caiu no build message")
+            .then(() => {
+              console.log("Mensagem enviada com sucesso!!");
+            })
+            .catch((err) => {
+              errorMessage();
+              // console.log(err);
+            });
+          }
+          // let valueForSending: any[] = receivedMessage.messagePayload.actions
+          // ? receivedMessage.messagePayload.actions.map((content: any) => content.label)
+          // : ["Cancelar"];
         
           await buildPayloadWhatsapp(valueForSending, false)
           // console.log("Caiu no build message")
