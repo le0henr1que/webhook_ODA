@@ -124,16 +124,16 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
         }
         
         function errorMessage(){
-          contentMessage.type = "interactive";
-          contentMessage.interactive = interactive;
-          contentMessage.interactive.type = "button";
-          contentMessage.interactive.action = {};
-          contentMessage.interactive.body.text = "Ocorreu um erro inesperado, Clique no botão 'Reiniciar' e tente novamente"
-          contentMessage.interactive.action.buttons = [{
-              type: "reply",
-              reply: { id: "Reiniciar", title: "Reiniciar" }
-            }]
-          sendMessage(contentMessage)
+          // contentMessage.type = "interactive";
+          // contentMessage.interactive = interactive;
+          // contentMessage.interactive.type = "button";
+          // contentMessage.interactive.action = {};
+          // contentMessage.interactive.body.text = "Ocorreu um erro inesperado, Clique no botão 'Reiniciar' e tente novamente"
+          // contentMessage.interactive.action.buttons = [{
+          //     type: "reply",
+          //     reply: { id: "Reiniciar", title: "Reiniciar" }
+          //   }]
+          // sendMessage(contentMessage)
           console.log(`Parece que ocorreu um erro ao enviar a mensagem de: ${from}`)
           console.log(contentMessage)
         }
