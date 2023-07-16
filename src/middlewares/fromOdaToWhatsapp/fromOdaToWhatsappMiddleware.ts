@@ -102,7 +102,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
               contentMessage.interactive.action.buttons = [{}];
               contentMessage.interactive.action.buttons[0] = {
                 type: "reply",
-                reply: { id: content.title, title: "Selecionar plano" }
+                reply: { id: content.actions.label, title: "Selecionar plano" }
               };
               console.log(contentMessage)
               await sendMessage(contentMessage);
@@ -131,7 +131,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
               contentMessage.interactive.action.buttons = [{}];
               contentMessage.interactive.action.buttons[0] = {
                 type: "reply",
-                reply: { id: "Selecionar", title: "Selecionar" }
+                reply: { id: content.label, title: "Selecionar" }
               };
               console.log(contentMessage)
               await sendMessage(contentMessage);
