@@ -74,34 +74,64 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
           contentMessage.interactive.action = {};
 
           console.log("caiu dentro da build message com o array "+ JSON.stringify(contentMessage))
-          if(listButton && messageList.length > 3){
+          // if(listButton && messageList.length > 3){
             
-            await sendMessage({  
+          //   await sendMessage({  
+          //     messaging_product: "whatsapp",
+          //     to: from,
+          //     text: {
+          //       body: receivedMessage.messagePayload.text,
+          //     }
+          //   });
+          //   // console.log(messageList)
+            
+          //   for (const content of messageList) {
+          //     console.log(messageList)
+          //     console.log("Caindo no for se for pra mostrar uma mensagem e um botão com o array " + JSON.stringify(contentMessage))
+          //     contentMessage.interactive.body = {text:content}
+          //     contentMessage.interactive.type = "button"
+          //     contentMessage.interactive.action.buttons = [{}];
+          //     contentMessage.interactive.action.buttons[0] = {
+          //       type: "reply",
+          //       reply: { id: "Selecionar", title: "Selecionar" }
+          //     };
+          
+          //     await sendMessage(contentMessage);
+          //     // console.log()
+          //   }
+          //   return
+          // }
+          if (listButton && messageList.length > 3) {
+            await sendMessage({
               messaging_product: "whatsapp",
               to: from,
               text: {
                 body: receivedMessage.messagePayload.text,
-              }
+              },
             });
-            // console.log(messageList)
-            
+          
             for (const content of messageList) {
-              console.log(messageList)
-              console.log("Caindo no for se for pra mostrar uma mensagem e um botão com o array " + JSON.stringify(contentMessage))
-              contentMessage.interactive.body = {text:content}
-              contentMessage.interactive.type = "button"
-              contentMessage.interactive.action.buttons = [{}];
-              contentMessage.interactive.action.buttons[0] = {
-                type: "reply",
-                reply: { id: "Selecionar", title: "Selecionar" }
+              const clonedMessage = {
+                ...contentMessage,
+                interactive: {
+                  ...contentMessage.interactive,
+                  body: { text: content },
+                },
               };
           
-              await sendMessage(contentMessage);
-              // console.log()
+              clonedMessage.interactive.type = "button";
+              clonedMessage.interactive.action.buttons = [
+                {
+                  type: "reply",
+                  reply: { id: "Selecionar", title: "Selecionar" },
+                },
+              ];
+          
+              await sendMessage(clonedMessage);
             }
-            return
+            return;
           }
-
+          
           if(!listButton && messageList.length <= 3){
             console.log(messageList)
             console.log("Caindo no list menor que três pra bostrar três botões com o array " + JSON.stringify(contentMessage))
@@ -156,7 +186,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
         }
     
 
-          let valueForSending:any[] = []
+          // let valueForSending:any[] = []
           
           // if (receivedMessage.messagePayload.actions) {
           //   console.log("Existe")
@@ -167,34 +197,9 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
 
           // valueForSending = ["Cancelar"]
 
-          if(receivedMessage.messagePayload.actions){
-            valueForSending = receivedMessage.messagePayload.actions.map((content: any) => content.label);
-            await buildPayloadWhatsapp(valueForSending, false)
-            // console.log("Caiu no build message")
-            .then(() => {
-              console.log("Mensagem enviada com sucesso!!");
-            })
-            .catch((err) => {
-              errorMessage();
-              // console.log(err);
-            });
-          }
-          if(!receivedMessage.messagePayload.actions){
-            valueForSending = ["Cancelar"]
-
-            await buildPayloadWhatsapp(valueForSending, false)
-            // console.log("Caiu no build message")
-            .then(() => {
-              console.log("Mensagem enviada com sucesso!!");
-            })
-            .catch((err) => {
-              errorMessage();
-              // console.log(err);
-            });
-          }
-          // let valueForSending: any[] = receivedMessage.messagePayload.actions
-          // ? receivedMessage.messagePayload.actions.map((content: any) => content.label)
-          // : ["Cancelar"];
+          let valueForSending: any[] = receivedMessage.messagePayload.actions
+          ? receivedMessage.messagePayload.actions.map((content: any) => content.label)
+          : ["Cancelar"];
         
           await buildPayloadWhatsapp(valueForSending, false)
           // console.log("Caiu no build message")
