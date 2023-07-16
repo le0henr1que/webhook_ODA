@@ -161,22 +161,20 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
           // console.log(JSON.stringify(contentMessage))
         }
     
+        let valueForSending: any[];
 
-          let valueForSending: any[]
-
-          valueForSending = receivedMessage.messagePayload.actions 
-          && receivedMessage.messagePayload.actions.map((content: any) => content.label)
-          
-          valueForSending = receivedMessage.messagePayload.cards.actions 
-          && receivedMessage.messagePayload.cards.map((content: any) => content.actions.title)
-          
-          valueForSending = !receivedMessage.messagePayload.cards.actions && !receivedMessage.messagePayload.actions 
-          && ["Cancelar"];
-
-          console.log("AQUI ESTÁ AS ACTIONS")
-          console.log(JSON.stringify(receivedMessage))
+        if (receivedMessage.messagePayload.actions) {
+          valueForSending = receivedMessage.messagePayload.actions.map((content: any) => content.label);
+        } else if (receivedMessage.messagePayload.cards && receivedMessage.messagePayload.cards.actions) {
+          valueForSending = receivedMessage.messagePayload.cards.map((content: any) => content.actions.title);
+        } else {
+          valueForSending = ["Cancelar"];
+        }
         
-          await buildPayloadWhatsapp(valueForSending, false)
+        console.log("AQUI ESTÃO AS ACTIONS");
+        console.log(JSON.stringify(receivedMessage));
+        
+        await buildPayloadWhatsapp(valueForSending, false)
           .then(() => {
             console.log("Mensagem enviada com sucesso!!");
           })
