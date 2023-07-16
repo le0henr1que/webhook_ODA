@@ -79,7 +79,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
           
           console.log("caiu dentro da build message com o array "+ JSON.stringify(contentMessage))
           
-          if(listButton == "list-description" && messageList.cards ){
+          if(messageList.cards ){
             
             await sendMessage({  
               messaging_product: "whatsapp",
@@ -111,7 +111,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
             return
           }
 
-          if(listButton == "list-only-button" && messageList.length > 3){
+          if(messageList.length > 3){
             
             await sendMessage({  
               messaging_product: "whatsapp",
