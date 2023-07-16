@@ -38,17 +38,18 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
         }
         
           async function sendMessage(payload:any){
-            return await axios.post(
-              `https://graph.facebook.com/v16.0/${phon_no_id}/messages`,
-              payload,
-              {
-                headers: {
-                  Authorization: `Bearer ${env.whatsappToken}`,
-                  "Content-Type": "application/json",
-                },
-              }
-            )
-            
+            if(payload.interactive.body.text){
+              return await axios.post(
+                `https://graph.facebook.com/v16.0/${phon_no_id}/messages`,
+                payload,
+                {
+                  headers: {
+                    Authorization: `Bearer ${env.whatsappToken}`,
+                    "Content-Type": "application/json",
+                  },
+                }
+              )
+            }
           }
           
        
@@ -72,7 +73,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
           contentMessage.interactive.type = "";
           contentMessage.interactive.action = {};
 
-       
+          console.log("caiu dentro da build message com o array "+ JSON.stringify(contentMessage))
           if(listButton && messageList.length > 3){
             
             await sendMessage({  
@@ -85,7 +86,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
             // console.log(messageList)
             
             for (const content of messageList) {
-              console.log(content)
+              console.log("Caindo no for se for pra mostrar uma mensagem e um botão com o array " + JSON.stringify(contentMessage))
               contentMessage.interactive.body.text = content
               contentMessage.interactive.type = "button"
               contentMessage.interactive.action.buttons = [{}];
@@ -101,6 +102,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
           }
 
           if(!listButton && messageList.length <= 3){
+            console.log("Caindo no list menor que três pra bostrar três botões com o array " + JSON.stringify(contentMessage))
             // console.log("Aqui ta caindo, dentro da functin")
             contentMessage.interactive.type = "button"
             contentMessage.interactive.action.buttons = messageList.map((content) => {
@@ -114,6 +116,8 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
           }
 
           if(!listButton && messageList.length > 3){
+            console.log("Caiu no list pra mostrar a lista " + JSON.stringify(contentMessage))
+
             contentMessage.interactive.type = "list"
             contentMessage.interactive.action.button =  "Clique p/ selecionar"
             interactive.action.sections = [{}]
@@ -145,7 +149,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
           //   }]
           // sendMessage(contentMessage)
           console.log(`Parece que ocorreu um erro ao enviar a mensagem de: ${from}`)
-          console.log(JSON.stringify(contentMessage))
+          // console.log(JSON.stringify(contentMessage))
         }
     
 
@@ -164,14 +168,15 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
           ? receivedMessage.messagePayload.actions.map((content: any) => content.label)
           : ["Cancelar"];
         
-        await buildPayloadWhatsapp(valueForSending, false)
-          // .then(() => {
-          //   console.log("Mensagem enviada com sucesso!!");
-          // })
-          // .catch((err) => {
-          //   errorMessage();
-          //   console.log(err);
-          // });
+          await buildPayloadWhatsapp(valueForSending, false)
+          // console.log("Caiu no build message")
+          .then(() => {
+            console.log("Mensagem enviada com sucesso!!");
+          })
+          .catch((err) => {
+            errorMessage();
+            // console.log(err);
+          });
 
           // await buildPayloadWhatsapp(valueForSending, false)
           // a função a baixo retorna os dados por meio de um botão
