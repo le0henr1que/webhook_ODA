@@ -38,7 +38,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
         }
         
           async function sendMessage(payload:any){
-            if(payload.interactive.body.text){
+
               return await axios.post(
                 `https://graph.facebook.com/v16.0/${phon_no_id}/messages`,
                 payload,
@@ -49,7 +49,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
                   },
                 }
               )
-            }
+            
           }
           
        
@@ -72,9 +72,10 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
           contentMessage.interactive = interactive;
           contentMessage.interactive.type = "";
           contentMessage.interactive.action = {};
-          contentMessage.interactive.body = {text:receivedMessage.messagePayload.text}
-          
+          contentMessage.interactive.body.text = receivedMessage.messagePayload.text
+
           console.log("caiu dentro da build message com o array "+ JSON.stringify(contentMessage))
+          
           if(listButton && messageList.length > 3){
             
             await sendMessage({  
@@ -90,14 +91,14 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
             console.log(messageList)
 
               console.log("Caindo no for se for pra mostrar uma mensagem e um botão com o array " + JSON.stringify(contentMessage))
-              contentMessage.interactive.body = {text:content}
+              contentMessage.interactive.body.text = content
               contentMessage.interactive.type = "button"
               contentMessage.interactive.action.buttons = [{}];
               contentMessage.interactive.action.buttons[0] = {
                 type: "reply",
                 reply: { id: "Selecionar", title: "Selecionar" }
               };
-          
+              console.log(contentMessage)
               await sendMessage(contentMessage);
               // console.log()
             }
@@ -108,6 +109,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
             console.log(messageList)
             console.log("Caindo no list menor que três pra bostrar três botões com o array " + JSON.stringify(contentMessage))
             // console.log("Aqui ta caindo, dentro da functin")
+            contentMessage.interactive.body.text = receivedMessage.messagePayload.text
             contentMessage.interactive.type = "button"
             contentMessage.interactive.action.buttons = messageList.map((content) => {
               return {
@@ -115,7 +117,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
                 reply: { id: content, title: content }
               };
             });
-
+            console.log(contentMessage)
             return sendMessage(contentMessage)
           }
 
@@ -126,6 +128,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
             contentMessage.interactive.action.button =  "Clique p/ selecionar"
             interactive.action.sections = [{}]
             interactive.action.sections[0].title = ""
+            contentMessage.interactive.body.text = receivedMessage.messagePayload.text
             interactive.action.sections[0].rows = messageList.map((content) => {
               return {
                 id: content,
@@ -163,7 +166,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
           ? receivedMessage.messagePayload.actions.map((content: any) => content.label)
           : ["Cancelar"];
         
-          await buildPayloadWhatsapp(valueForSending, false)
+          await buildPayloadWhatsapp(valueForSending, true)
           .then(() => {
             console.log("Mensagem enviada com sucesso!!");
           })
