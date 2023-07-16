@@ -87,7 +87,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
             
             for (const content of messageList) {
               console.log("Caindo no for se for pra mostrar uma mensagem e um botão com o array " + JSON.stringify(contentMessage))
-              contentMessage.interactive.body.text = content
+              contentMessage.interactive.body = {text:content}
               contentMessage.interactive.type = "button"
               contentMessage.interactive.action.buttons = [{}];
               contentMessage.interactive.action.buttons[0] = {
