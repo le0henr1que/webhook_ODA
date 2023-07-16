@@ -86,6 +86,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
             // console.log(messageList)
             
             for (const content of messageList) {
+              console.log(messageList)
               console.log("Caindo no for se for pra mostrar uma mensagem e um botão com o array " + JSON.stringify(contentMessage))
               contentMessage.interactive.body = {text:content}
               contentMessage.interactive.type = "button"
@@ -102,6 +103,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
           }
 
           if(!listButton && messageList.length <= 3){
+            console.log(messageList)
             console.log("Caindo no list menor que três pra bostrar três botões com o array " + JSON.stringify(contentMessage))
             // console.log("Aqui ta caindo, dentro da functin")
             contentMessage.interactive.type = "button"
@@ -116,6 +118,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
           }
 
           if(!listButton && messageList.length > 3){
+            console.log(messageList)
             console.log("Caiu no list pra mostrar a lista " + JSON.stringify(contentMessage))
 
             contentMessage.interactive.type = "list"
