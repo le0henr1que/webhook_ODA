@@ -85,6 +85,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
             console.log(messageList)
             
             for (const content of messageList) {
+              contentMessage.interactive.body.text = content
               contentMessage.interactive.type = "button"
               contentMessage.interactive.action.buttons = [{}];
               contentMessage.interactive.action.buttons[0] = {
@@ -92,7 +93,6 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
                 reply: { id: "Selecionar", title: "Selecionar" }
               };
           
-              contentMessage.interactive.body.text = content
               await sendMessage(contentMessage);
               // console.log()
             }
