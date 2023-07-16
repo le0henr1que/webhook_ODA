@@ -27,7 +27,9 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
       WebhookEvent.MESSAGE_RECEIVED,
       async (receivedMessage: {
         number: any;
-        messagePayload: { actions: any[]; text: string };
+        messagePayload: {
+          cards: any; actions: any[]; text: string 
+};
       }) => {
         // const { receivedMessage, from, phon_no_id } = req.body
         function delay(ms: number): Promise<void> {
@@ -160,11 +162,17 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
         }
     
 
+          let valueForSending: any[]
 
+          valueForSending = receivedMessage.messagePayload.actions 
+          && receivedMessage.messagePayload.actions.map((content: any) => content.label)
+          
+          valueForSending = receivedMessage.messagePayload.cards.actions 
+          && receivedMessage.messagePayload.cards.map((content: any) => content.actions.title)
+          
+          valueForSending = !receivedMessage.messagePayload.cards.actions && !receivedMessage.messagePayload.actions 
+          && ["Cancelar"];
 
-          let valueForSending: any[] = receivedMessage.messagePayload.actions
-          ? receivedMessage.messagePayload.actions.map((content: any) => content.label)
-          : ["Cancelar"];
           console.log("AQUI ESTÁ AS ACTIONS")
           console.log(JSON.stringify(receivedMessage))
         
