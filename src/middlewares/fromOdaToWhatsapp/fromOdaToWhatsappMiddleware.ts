@@ -66,12 +66,14 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
           },
         };
 
+        console.log(interactive)
+        console.log("interactive")
         async function buildPayloadWhatsapp(messageList:string[], listButton:boolean){
           contentMessage.type = "interactive";
           contentMessage.interactive = interactive;
           contentMessage.interactive.type = "";
           contentMessage.interactive.action = {};
-
+          contentMessage.interactive.body.text = receivedMessage.messagePayload.text;
        
           if(listButton && messageList.length > 3){
             
@@ -102,6 +104,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
 
           if(!listButton && messageList.length <= 3){
             // console.log("Aqui ta caindo, dentro da functin")
+            contentMessage.interactive.body.text = receivedMessage.messagePayload.text;
             contentMessage.interactive.type = "button"
             contentMessage.interactive.action.buttons = messageList.map((content) => {
               return {
@@ -114,6 +117,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
           }
 
           if(!listButton && messageList.length > 3){
+            contentMessage.interactive.body.text = receivedMessage.messagePayload.text;
             contentMessage.interactive.type = "list"
             contentMessage.interactive.action.button =  "Clique p/ selecionar"
             interactive.action.sections = [{}]
