@@ -65,45 +65,43 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
             text: receivedMessage.messagePayload.text,
           },
         };
-
-        console.log(interactive)
-        console.log("interactive")
+        
         async function buildPayloadWhatsapp(messageList:string[], listButton:boolean){
           contentMessage.type = "interactive";
           contentMessage.interactive = interactive;
           contentMessage.interactive.type = "";
           contentMessage.interactive.action = {};
-          contentMessage.interactive.body.text = receivedMessage.messagePayload.text;
+
        
-          if (listButton && messageList.length > 3) {
-            await sendMessage({
+          if(listButton && messageList.length > 3){
+            
+            await sendMessage({  
               messaging_product: "whatsapp",
               to: from,
               text: {
                 body: receivedMessage.messagePayload.text,
-              },
+              }
             });
-          
+            // console.log(messageList)
+            
             for (const content of messageList) {
-              const clonedMessage = { ...contentMessage }; // Cria uma cópia separada do objeto
+              console.log(content)
+              contentMessage.interactive.body.text = content
+              contentMessage.interactive.type = "button"
+              contentMessage.interactive.action.buttons = [{}];
+              contentMessage.interactive.action.buttons[0] = {
+                type: "reply",
+                reply: { id: "Selecionar", title: "Selecionar" }
+              };
           
-              clonedMessage.interactive.body.text = content;
-              clonedMessage.interactive.type = "button";
-              clonedMessage.interactive.action.buttons = [
-                {
-                  type: "reply",
-                  reply: { id: "Selecionar", title: "Selecionar" },
-                },
-              ];
-          
-              await sendMessage(clonedMessage);
+              await sendMessage(contentMessage);
+              // console.log()
             }
-            return;
+            return
           }
 
           if(!listButton && messageList.length <= 3){
             // console.log("Aqui ta caindo, dentro da functin")
-            contentMessage.interactive.body.text = receivedMessage.messagePayload.text;
             contentMessage.interactive.type = "button"
             contentMessage.interactive.action.buttons = messageList.map((content) => {
               return {
@@ -116,7 +114,6 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
           }
 
           if(!listButton && messageList.length > 3){
-            contentMessage.interactive.body.text = receivedMessage.messagePayload.text;
             contentMessage.interactive.type = "list"
             contentMessage.interactive.action.button =  "Clique p/ selecionar"
             interactive.action.sections = [{}]
@@ -167,7 +164,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
           ? receivedMessage.messagePayload.actions.map((content: any) => content.label)
           : ["Cancelar"];
         
-        await buildPayloadWhatsapp(valueForSending, true)
+        await buildPayloadWhatsapp(valueForSending, false)
           // .then(() => {
           //   console.log("Mensagem enviada com sucesso!!");
           // })
