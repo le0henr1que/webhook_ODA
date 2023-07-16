@@ -79,7 +79,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
           
           console.log("caiu dentro da build message com o array "+ JSON.stringify(contentMessage))
           
-          if(listButton && messageList.cards.length > 3 ){
+          if(listButton && messageList.cards ){
             
             await sendMessage({  
               messaging_product: "whatsapp",
