@@ -28,6 +28,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
       async (receivedMessage: {
         number: any;
         messagePayload: {
+          type: string;
           cards: any; actions: any[]; text: string 
 };
       }) => {
@@ -69,7 +70,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
           },
         };
         
-        async function buildPayloadWhatsapp(messageList:string[], listButton:boolean){
+        async function buildPayloadWhatsapp(messageList:any, listButton:boolean){
           contentMessage.type = "interactive";
           contentMessage.interactive = interactive;
           contentMessage.interactive.type = "";
@@ -78,6 +79,38 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
           
           console.log("caiu dentro da build message com o array "+ JSON.stringify(contentMessage))
           
+          if(listButton && messageList.cards.length > 3 ){
+            
+            await sendMessage({  
+              messaging_product: "whatsapp",
+              to: from,
+              text: {
+                body: "Para continuar, selecione um plano:",
+              }
+            });
+            // console.log(messageList)
+            
+            for (const content of messageList.cards) {
+            console.log(messageList.cards)
+
+              console.log("Caindo no for se for pra mostrar uma mensagem e um botão com o array " + JSON.stringify(contentMessage))
+              contentMessage.interactive.body.text = content.description
+              contentMessage.interactive.header = {}
+              contentMessage.interactive.header.type = "text"
+              contentMessage.interactive.header.text = content.title
+              contentMessage.interactive.type = "button"
+              contentMessage.interactive.action.buttons = [{}];
+              contentMessage.interactive.action.buttons[0] = {
+                type: "reply",
+                reply: { id: content.title, title: "Selecionar plano" }
+              };
+              console.log(contentMessage)
+              await sendMessage(contentMessage);
+              // console.log()
+            }
+            return
+          }
+
           if(listButton && messageList.length > 3){
             
             await sendMessage({  
@@ -113,7 +146,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
             // console.log("Aqui ta caindo, dentro da functin")
             contentMessage.interactive.body.text = receivedMessage.messagePayload.text
             contentMessage.interactive.type = "button"
-            contentMessage.interactive.action.buttons = messageList.map((content) => {
+            contentMessage.interactive.action.buttons = messageList.map((content:any) => {
               return {
                 type: "reply",
                 reply: { id: content, title: content }
@@ -131,7 +164,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
             interactive.action.sections = [{}]
             interactive.action.sections[0].title = ""
             contentMessage.interactive.body.text = receivedMessage.messagePayload.text
-            interactive.action.sections[0].rows = messageList.map((content) => {
+            interactive.action.sections[0].rows = messageList.map((content:any) => {
               return {
                 id: content,
                 title: " ",
@@ -161,26 +194,28 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
           // console.log(JSON.stringify(contentMessage))
         }
     
-        let valueForSending: any[];
+        let valueForSending: any;
 
         if (receivedMessage.messagePayload.actions) {
           valueForSending = receivedMessage.messagePayload.actions.map((content: any) => content.label);
-        } else if (receivedMessage.messagePayload.cards && receivedMessage.messagePayload.cards.actions) {
-          valueForSending = receivedMessage.messagePayload.cards.map((content: any) => content.actions.title);
+        } else if (receivedMessage.messagePayload.cards && receivedMessage.messagePayload.type === "card") {
+          valueForSending = receivedMessage.messagePayload;
         } else {
           valueForSending = ["Cancelar"];
         }
+        // console.log(receivedMessage.messagePayload.type)
+
+        console.log(valueForSending)
+        // console.log("AQUI ESTÃO AS ACTIONS");
+        // console.log(JSON.stringify(receivedMessage));
         
-        console.log("AQUI ESTÃO AS ACTIONS");
-        console.log(JSON.stringify(receivedMessage));
-        
-        await buildPayloadWhatsapp(valueForSending, false)
+        await buildPayloadWhatsapp(valueForSending, true)
           .then(() => {
             console.log("Mensagem enviada com sucesso!!");
           })
           .catch((err) => {
             errorMessage();
-            // console.log(err);
+            console.log(err);
           });
 
   
