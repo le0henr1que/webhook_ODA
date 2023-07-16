@@ -82,9 +82,10 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
                 body: receivedMessage.messagePayload.text,
               }
             });
-            console.log(messageList)
+            // console.log(messageList)
             
             for (const content of messageList) {
+              console.log(content)
               contentMessage.interactive.body.text = content
               contentMessage.interactive.type = "button"
               contentMessage.interactive.action.buttons = [{}];
@@ -163,7 +164,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
           ? receivedMessage.messagePayload.actions.map((content: any) => content.label)
           : ["Cancelar"];
         
-        buildPayloadWhatsapp(valueForSending, true)
+        await buildPayloadWhatsapp(valueForSending, true)
           .then(() => {
             console.log("Mensagem enviada com sucesso!!");
           })
