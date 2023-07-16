@@ -165,13 +165,13 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
           : ["Cancelar"];
         
         await buildPayloadWhatsapp(valueForSending, false)
-          .then(() => {
-            console.log("Mensagem enviada com sucesso!!");
-          })
-          .catch((err) => {
-            errorMessage();
-            console.log(err);
-          });
+          // .then(() => {
+          //   console.log("Mensagem enviada com sucesso!!");
+          // })
+          // .catch((err) => {
+          //   errorMessage();
+          //   console.log(err);
+          // });
 
           // await buildPayloadWhatsapp(valueForSending, false)
           // a função a baixo retorna os dados por meio de um botão
