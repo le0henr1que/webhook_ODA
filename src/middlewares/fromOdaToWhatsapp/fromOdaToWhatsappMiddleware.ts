@@ -87,6 +87,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
           
               contentMessage.interactive.body.text = content
               await sendMessage(contentMessage);
+              // console.log()
             }
             return
           }
@@ -135,7 +136,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
           //   }]
           // sendMessage(contentMessage)
           console.log(`Parece que ocorreu um erro ao enviar a mensagem de: ${from}`)
-          console.log(contentMessage)
+          console.log(JSON.stringify(contentMessage))
         }
     
 
@@ -154,7 +155,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
           .then(content => console.log("Mensagem enviada com sucesso!!"))
           .catch((err) => {
             errorMessage()
-            console.log(err.message)
+            console.log(err)
           })
 
     
