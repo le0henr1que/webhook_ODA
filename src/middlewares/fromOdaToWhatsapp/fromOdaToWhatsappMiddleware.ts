@@ -75,31 +75,30 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
           contentMessage.interactive.action = {};
           contentMessage.interactive.body.text = receivedMessage.messagePayload.text;
        
-          if(listButton && messageList.length > 3){
-            
-            await sendMessage({  
+          if (listButton && messageList.length > 3) {
+            await sendMessage({
               messaging_product: "whatsapp",
               to: from,
               text: {
                 body: receivedMessage.messagePayload.text,
-              }
+              },
             });
-            // console.log(messageList)
-            
-            for (const content of messageList) {
-              console.log(content)
-              contentMessage.interactive.body.text = content
-              contentMessage.interactive.type = "button"
-              contentMessage.interactive.action.buttons = [{}];
-              contentMessage.interactive.action.buttons[0] = {
-                type: "reply",
-                reply: { id: "Selecionar", title: "Selecionar" }
-              };
           
-              await sendMessage(contentMessage);
-              // console.log()
+            for (const content of messageList) {
+              const clonedMessage = { ...contentMessage }; // Cria uma cópia separada do objeto
+          
+              clonedMessage.interactive.body.text = content;
+              clonedMessage.interactive.type = "button";
+              clonedMessage.interactive.action.buttons = [
+                {
+                  type: "reply",
+                  reply: { id: "Selecionar", title: "Selecionar" },
+                },
+              ];
+          
+              await sendMessage(clonedMessage);
             }
-            return
+            return;
           }
 
           if(!listButton && messageList.length <= 3){
@@ -168,7 +167,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
           ? receivedMessage.messagePayload.actions.map((content: any) => content.label)
           : ["Cancelar"];
         
-        await buildPayloadWhatsapp(valueForSending, false)
+        await buildPayloadWhatsapp(valueForSending, true)
           // .then(() => {
           //   console.log("Mensagem enviada com sucesso!!");
           // })
