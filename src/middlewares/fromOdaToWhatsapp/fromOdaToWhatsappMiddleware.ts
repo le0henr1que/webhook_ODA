@@ -73,7 +73,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
           contentMessage.interactive.type = "";
           contentMessage.interactive.action = {};
           contentMessage.interactive.body.text = receivedMessage.messagePayload.text
-
+          
           console.log("caiu dentro da build message com o array "+ JSON.stringify(contentMessage))
           
           if(listButton && messageList.length > 3){
@@ -145,16 +145,16 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
         }
         
         function errorMessage(){
-          // contentMessage.type = "interactive";
-          // contentMessage.interactive = interactive;
-          // contentMessage.interactive.type = "button";
-          // contentMessage.interactive.action = {};
-          // contentMessage.interactive.body.text = "Ocorreu um erro inesperado, Clique no botão 'Reiniciar' e tente novamente"
-          // contentMessage.interactive.action.buttons = [{
-          //     type: "reply",
-          //     reply: { id: "Reiniciar", title: "Reiniciar" }
-          //   }]
-          // sendMessage(contentMessage)
+          contentMessage.type = "interactive";
+          contentMessage.interactive = interactive;
+          contentMessage.interactive.type = "button";
+          contentMessage.interactive.action = {};
+          contentMessage.interactive.body.text = "Ocorreu um erro inesperado, Clique no botão 'Reiniciar' e tente novamente"
+          contentMessage.interactive.action.buttons = [{
+              type: "reply",
+              reply: { id: "Reiniciar", title: "Reiniciar" }
+            }]
+          sendMessage(contentMessage)
           console.log(`Parece que ocorreu um erro ao enviar a mensagem de: ${from}`)
           // console.log(JSON.stringify(contentMessage))
         }
@@ -165,8 +165,10 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
           let valueForSending: any[] = receivedMessage.messagePayload.actions
           ? receivedMessage.messagePayload.actions.map((content: any) => content.label)
           : ["Cancelar"];
+          console.log("AQUI ESTÁ AS ACTIONS")
+          console.log(receivedMessage.messagePayload.actions)
         
-          await buildPayloadWhatsapp(valueForSending, true)
+          await buildPayloadWhatsapp(valueForSending, false)
           .then(() => {
             console.log("Mensagem enviada com sucesso!!");
           })
