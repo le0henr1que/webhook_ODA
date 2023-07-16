@@ -115,7 +115,10 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
                 ...contentMessage,
                 interactive: {
                   ...contentMessage.interactive,
-                  body: { text: content },
+                  body: {
+                    ...contentMessage.interactive.body,
+                    text: content, // Atualiza o valor de 'text' com o conteúdo de 'content'
+                  },
                 },
               };
           
@@ -131,7 +134,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
             }
             return;
           }
-          
+
           if(!listButton && messageList.length <= 3){
             console.log(messageList)
             console.log("Caindo no list menor que três pra bostrar três botões com o array " + JSON.stringify(contentMessage))
@@ -196,7 +199,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
           // }
 
           // valueForSending = ["Cancelar"]
-
+          
           let valueForSending: any[] = receivedMessage.messagePayload.actions
           ? receivedMessage.messagePayload.actions.map((content: any) => content.label)
           : ["Cancelar"];
