@@ -100,7 +100,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
             return
           }
 
-          if(messageList.length <= 3){
+          if(!listButton && messageList.length <= 3){
             // console.log("Aqui ta caindo, dentro da functin")
             contentMessage.interactive.type = "button"
             contentMessage.interactive.action.buttons = messageList.map((content) => {
@@ -113,7 +113,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
             return sendMessage(contentMessage)
           }
 
-          if(messageList.length > 3){
+          if(!listButton && messageList.length > 3){
             contentMessage.interactive.type = "list"
             contentMessage.interactive.action.button =  "Clique p/ selecionar"
             interactive.action.sections = [{}]
