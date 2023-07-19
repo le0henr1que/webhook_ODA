@@ -30,9 +30,9 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
         messagePayload: {
           type: string;
           cards: any; actions: any[]; text: string 
-};
+        };
       }) => {
-        // const { receivedMessage, from, phon_no_id } = req.body
+
         function delay(ms: number): Promise<void> {
           return new Promise((resolve) => setTimeout(resolve, ms));
         }
@@ -55,8 +55,6 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
             
           }
           
-       
-
         console.log("Received a message from ODA, processing message before sending to WhatsApp.");
 
         let contentMessage: any = {
@@ -85,10 +83,10 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
               messaging_product: "whatsapp",
               to: from,
               text: {
-                body: "Para continuar, selecione um plano:",
+                body: "Selecione um plano",
               }
             });
-            // console.log(messageList)
+      
             
             for (const content of messageList.cards) {
             console.log(messageList.cards)
@@ -143,7 +141,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
           if(messageList.length <= 3){
             console.log(messageList)
             console.log("Caindo no list menor que três pra bostrar três botões com o array " + JSON.stringify(contentMessage))
-            // console.log("Aqui ta caindo, dentro da functin")
+           
             contentMessage.interactive.body.text = receivedMessage.messagePayload.text
             contentMessage.interactive.type = "button"
             contentMessage.interactive.action.buttons = messageList.map((content:any) => {
@@ -171,8 +169,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
                 description: content
               };
             });
-            // console.log(messageList)
-            // console.log(JSON.stringify(contentMessage))
+       
             return sendMessage(contentMessage)
             
           }
@@ -203,11 +200,10 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
         } else {
           valueForSending = ["Cancelar"];
         }
-        // console.log(receivedMessage.messagePayload.type)
+  
 
         console.log(valueForSending)
-        // console.log("AQUI ESTÃO AS ACTIONS");
-        // console.log(JSON.stringify(receivedMessage));
+   
         
         await buildPayloadWhatsapp(valueForSending, "list-description")
           .then(() => {
