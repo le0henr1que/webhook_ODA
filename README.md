@@ -1,6 +1,6 @@
 # Seikyo Webhook documentation
 
-# **Integração do Oracle Digital Assistant com o WhatsApp via Facebook for Developers**
+**Integração do Oracle Digital Assistant com o WhatsApp via Facebook for Developers**
 
 **Pré-requisitos:**
 
@@ -49,16 +49,36 @@ Agora vamos configurar o webhook para que o ODA e o WhatsApp possam se comunicar
 ## **Teste e Verificação**
 
 1. Inicie o servidor que você configurou para o webhook.
-2. Verifique se todas as rotas e endpoints estão funcionando corretamente.
-3. No Console do Oracle Digital Assistant, acesse a seção "Testar" e inicie uma conversa com o agente configurado para o WhatsApp.
-4. Envie mensagens para o número de telefone registrado no WhatsApp Business API e verifique se as mensagens são processadas corretamente pelo ODA e as respostas são enviadas de volta ao WhatsApp.
+2. Verifique se todas as rotas e endpoints estão funcionando corretamente
+3. Envie mensagens para o número de telefone registrado no WhatsApp Business API e verifique se as mensagens são processadas corretamente pelo ODA e as respostas são enviadas de volta ao WhatsApp.
 
-Parabéns! Agora você concluiu a integração do Oracle Digital Assistant com o WhatsApp via Facebook for Developers. O seu assistente virtual está pronto para interagir com os usuários por meio do WhatsApp, proporcionando uma experiência conversacional automatizada. Lembre-se de monitorar e atualizar regularmente a integração para garantir um bom desempenho contínuo.
+## **Deploy**
+## Configuração do Ambiente
 
+Após ter o Docker e o Docker Compose instalados, siga os passos abaixo para configurar o ambiente e executar o aplicativo:
+
+1. Clone o repositório do projeto em sua máquina local;
+2. Construa as imagens do Docker e inicie os contêineres com o Docker Compose;
+3. Para realizar a build do projeto utilizando Docker e garantir o correto funcionamento em ambiente de produção, é necessário criar o arquivo .env.production no repositório raiz do projeto. Esse arquivo será responsável por armazenar as variáveis de ambiente específicas para o ambiente de produção.
 ---
+## Utilização das Variáveis de Ambiente no Projeto
+No projeto do webhook para WhatsApp com Oracle Digital Assistant, as seguintes variáveis de ambiente são utilizadas:
 
+`WHATSAPP_TOKEN`: Este é o token de autenticação do WhatsApp que será utilizado para se comunicar com a API do WhatsApp. Substitua pelo seu token real.
+
+`MY_TOKEN`: Este é um token específico do projeto que será utilizado para autenticar as solicitações recebidas pelo webhook. Substitua pelo seu token real.
+
+`PORT`: Esta variável define a porta em que o servidor do webhook será executado. Neste exemplo, o servidor será executado na porta 5000.
+
+`URL_WEBHOOK_CLIENT`: Esta é a URL do webhook fornecida pelo Oracle Digital Assistant para receber as mensagens do WhatsApp. 
+
+`SECRET_WEBHOOK_CLIENT`: Esta é a chave secreta utilizada para autenticar as solicitações recebidas pelo webhook. Substitua pela chave secreta real.
+
+## Atenção
+As rotas disponíveis em nosso projeto estão integradas ao ecossistema do Oracle, e o ambiente do Oracle é necessário para executá-las com sucesso. Essa abordagem garante a segurança e a conformidade das operações, além de garantir o correto funcionamento de todo o sistema.
+por isso, existe uma rota que permite realizar simulações diretaamente pelo postman.
 # Postman Documentation
 
-[](https://grey-crescent-926935.postman.co/workspace/Team-Workspace~7b8abb1c-86bf-4393-8498-a8e87d5127da/collection/23356385-f5464059-92d3-4f28-898f-883e4f557eb2?action=share&creator=23356385)
+[https://www.oracle.com/digital-assistant](https://grey-crescent-926935.postman.co/workspace/Team-Workspace~7b8abb1c-86bf-4393-8498-a8e87d5127da/collection/23356385-f5464059-92d3-4f28-898f-883e4f557eb2?action=share&creator=23356385)
 
 Em caso de dúvidas ou problemas, consulte a documentação oficial do Oracle Digital Assistant e do WhatsApp Business API.
