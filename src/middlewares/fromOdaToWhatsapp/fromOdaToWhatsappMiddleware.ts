@@ -104,7 +104,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
               };
               console.log(contentMessage)
               await sendMessage(contentMessage);
-              // console.log()
+              
             }
             return
           }
@@ -118,7 +118,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
                 body: receivedMessage.messagePayload.text,
               }
             });
-            // console.log(messageList)
+            
             
             for (const content of messageList) {
             console.log(messageList)
@@ -205,9 +205,9 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
         console.log(valueForSending)
    
         
-        await buildPayloadWhatsapp(valueForSending, "list-description")
+        await buildPayloadWhatsapp(valueForSending, "list-for-wpp-list")
           .then(() => {
-            console.log("Mensagem enviada com sucesso!!");
+            // console.log("Mensagem enviada com sucesso!!");
           })
           .catch((err) => {
             errorMessage();
