@@ -39,7 +39,9 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
         if (!webhookExecutado) {
           webhookExecutado = true;
         }
-        
+          console.log(req)
+          // const {phon_no_id, from, receivedMessage} = req.body
+     
           async function sendMessage(payload:any){
 
               return await axios.post(
@@ -55,7 +57,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
             
           }
           
-        console.log("Received a message from ODA, processing message before sending to WhatsApp.");
+        // console.log("Received a message from ODA, processing message before sending to WhatsApp.");
 
         let contentMessage: any = {
           messaging_product: "whatsapp",
@@ -68,16 +70,17 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
           },
         };
         
-        async function buildPayloadWhatsapp(messageList:any, listButton:string){
+        async function buildPayloadWhatsapp(messageList:any, listButton:string, isList:boolean){
+         
           contentMessage.type = "interactive";
           contentMessage.interactive = interactive;
           contentMessage.interactive.type = "";
           contentMessage.interactive.action = {};
           contentMessage.interactive.body.text = receivedMessage.messagePayload.text
           
-          console.log("caiu dentro da build message com o array "+ JSON.stringify(contentMessage))
+          // console.log("caiu dentro da build message com o array "+ JSON.stringify(contentMessage))
           
-          if(messageList.cards ){
+          if(messageList.cards && !isList){
             
             await sendMessage({  
               messaging_product: "whatsapp",
@@ -89,9 +92,9 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
       
             
             for (const content of messageList.cards) {
-            console.log(messageList.cards)
+            // console.log(messageList.cards)
 
-              console.log("Caindo no for se for pra mostrar uma mensagem e um botão com o array " + JSON.stringify(contentMessage))
+              // console.log("Caindo no for se for pra mostrar uma mensagem e um botão com o array " + JSON.stringify(contentMessage))
               contentMessage.interactive.body.text = content.description
               contentMessage.interactive.header = {}
               contentMessage.interactive.header.type = "text"
@@ -102,9 +105,9 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
                 type: "reply",
                 reply: { id: content.actions[0].label, title: "Selecionar plano" }
               };
-              console.log(contentMessage)
+              // console.log(contentMessage)
               await sendMessage(contentMessage);
-              
+              // console.log()
             }
             return
           }
@@ -118,12 +121,12 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
                 body: receivedMessage.messagePayload.text,
               }
             });
-            
+            // console.log(messageList)
             
             for (const content of messageList) {
-            console.log(messageList)
+            // console.log(messageList)
 
-              console.log("Caindo no for se for pra mostrar uma mensagem e um botão com o array " + JSON.stringify(contentMessage))
+              // console.log("Caindo no for se for pra mostrar uma mensagem e um botão com o array " + JSON.stringify(contentMessage))
               contentMessage.interactive.body.text = content
               contentMessage.interactive.type = "button"
               contentMessage.interactive.action.buttons = [{}];
@@ -131,7 +134,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
                 type: "reply",
                 reply: { id: content, title: "Selecionar" }
               };
-              console.log(contentMessage)
+              // console.log(contentMessage)
               await sendMessage(contentMessage);
               // console.log()
             }
@@ -139,8 +142,8 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
           }
 
           if(messageList.length <= 3){
-            console.log(messageList)
-            console.log("Caindo no list menor que três pra bostrar três botões com o array " + JSON.stringify(contentMessage))
+            // console.log(messageList)
+            // console.log("Caindo no list menor que três pra bostrar três botões com o array " + JSON.stringify(contentMessage))
            
             contentMessage.interactive.body.text = receivedMessage.messagePayload.text
             contentMessage.interactive.type = "button"
@@ -150,23 +153,24 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
                 reply: { id: content, title: content }
               };
             });
-            console.log(contentMessage)
+            // console.log(contentMessage)
             return sendMessage(contentMessage)
           }
 
-          if(listButton == "list-for-wpp-list" &&  messageList.length > 3){
+          if(listButton == "list-for-wpp-list" && isList){
             console.log("Caiu no list pra mostrar a lista " + JSON.stringify(contentMessage))
-
+            console.log("Caiu aqui dentro do lis ")
             contentMessage.interactive.type = "list"
-            contentMessage.interactive.action.button =  "Clique p/ selecionar"
+            
+            contentMessage.interactive.action.button =  "Selecione uma opção"
             interactive.action.sections = [{}]
             interactive.action.sections[0].title = ""
             contentMessage.interactive.body.text = receivedMessage.messagePayload.text
-            interactive.action.sections[0].rows = messageList.map((content:any) => {
+            interactive.action.sections[0].rows = messageList.cards.map((content:any) => {
               return {
-                id: content,
-                title: " ",
-                description: content
+                id: content.title,
+                title: content.title.split(" - ")[1],
+                description: content.title
               };
             });
        
@@ -202,12 +206,12 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
         }
   
 
-        console.log(valueForSending)
+        // console.log(valueForSending)
    
         
-        await buildPayloadWhatsapp(valueForSending, "list-for-wpp-list")
+        await buildPayloadWhatsapp(valueForSending, "list-for-wpp-list", true)
           .then(() => {
-            // console.log("Mensagem enviada com sucesso!!");
+            console.log("Mensagem enviada com sucesso!!");
           })
           .catch((err) => {
             errorMessage();
