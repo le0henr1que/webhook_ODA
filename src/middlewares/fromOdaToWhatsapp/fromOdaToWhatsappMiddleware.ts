@@ -165,11 +165,15 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
             contentMessage.interactive.action.button =  "Selecione uma opção"
             interactive.action.sections = [{}]
             interactive.action.sections[0].title = ""
-            contentMessage.interactive.body.text = receivedMessage.messagePayload.text
-            interactive.action.sections[0].rows = messageList.cards.map((content:any) => {
+            contentMessage.interactive.body.text = !receivedMessage.messagePayload.text ? "Selecione uma opção" : receivedMessage.messagePayload.text  
+            
+            interactive.action.sections[0].rows = messageList.cards.map((content: any) => {
+              const titleParts = content.title.split(" - ");
+              const titleToShow = titleParts.length > 1 ? titleParts[1] : titleParts[0];
+              const shortenedTitle = titleToShow.length === 24 ? titleToShow.slice(0, -3) + "..." : titleToShow;
               return {
                 id: content.title,
-                title: content.title.split(" - ")[1],
+                title: shortenedTitle,
                 description: content.title
               };
             });
