@@ -39,7 +39,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
         if (!webhookExecutado) {
           webhookExecutado = true;
         }
-          console.log(req)
+        
           // const {phon_no_id, from, receivedMessage} = req.body
      
           async function sendMessage(payload:any){
@@ -58,7 +58,8 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
           }
           
         // console.log("Received a message from ODA, processing message before sending to WhatsApp.");
-
+        console.log(JSON.stringify(receivedMessage))
+        
         let contentMessage: any = {
           messaging_product: "whatsapp",
           to: from, 
@@ -158,8 +159,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
           }
 
           if(listButton == "list-for-wpp-list" && isList){
-            console.log("Caiu no list pra mostrar a lista " + JSON.stringify(contentMessage))
-            console.log("Caiu aqui dentro do lis ")
+  
             contentMessage.interactive.type = "list"
             
             contentMessage.interactive.action.button =  "Selecione uma opção"
