@@ -165,7 +165,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
             contentMessage.interactive.action.button =  "Selecione uma opção"
             interactive.action.sections = [{}]
             interactive.action.sections[0].title = ""
-            contentMessage.interactive.body.text = !receivedMessage.messagePayload.text ? "Selecione uma opção" : receivedMessage.messagePayload.text  
+            contentMessage.interactive.body.text = !receivedMessage.messagePayload.text ? "Planos" : receivedMessage.messagePayload.text  
             
             interactive.action.sections[0].rows = messageList.cards.map((content: any) => {
               const titleParts = content.title.split(" - ");
