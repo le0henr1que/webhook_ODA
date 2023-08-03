@@ -174,7 +174,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
               contentMessage.interactive.action.buttons = messageList.globalActions.map((content:any) => {
                 return {
                   type: "reply",
-                  reply: { id: content.label, title: content.label }
+                  reply: { id: content.postback.action, title: content.label }
                 };
               });
             }
@@ -245,7 +245,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
                 const titleToShow = titleParts.length > 1 ? titleParts[1] : titleParts[0];
                 const shortenedTitle = titleToShow.length === 24 ? titleToShow.slice(0, -3) + "..." : titleToShow;
                 return {
-                  id: content.label,
+                  id: content.postback.action,
                   title: shortenedTitle,
                   description: content.label
                 };
