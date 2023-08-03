@@ -228,7 +228,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
                 }
                 let idSend = ""
                 if (content.postback.action){
-                  idSend = content.postback.action
+                  idSend = shortenedTitle
                 }
                 idSend = content.label
                 return {
