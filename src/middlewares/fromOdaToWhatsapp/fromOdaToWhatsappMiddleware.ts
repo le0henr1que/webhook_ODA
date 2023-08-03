@@ -226,13 +226,9 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
                 if(shortenedTitle.length >= 24){
                   shortenedTitle = content.label.split(" ")[0]
                 }
-                let idSend = ""
-                if (content.postback.action){
-                  idSend = shortenedTitle
-                }
-                idSend = content.label
+                
                 return {
-                  id: idSend,
+                  id: content.label,
                   title: shortenedTitle,
                   description: content.label
                 };
