@@ -33,6 +33,7 @@ export class WebhookUseCase {
 
     if (payload.entry[0].changes[0].value.messages[0]?.interactive?.list_reply) {
       msg_body = payload.entry[0].changes[0].value.messages[0].interactive.list_reply.id;
+      console.log(msg_body)
       // msg_body = payload.entry[0].changes[0].value.messages[0].interactive.list_reply.id;
       // console.log(payload.entry[0].changes[0].value.messages[0].interactive.list_reply)
       // console.log(msg_body)
