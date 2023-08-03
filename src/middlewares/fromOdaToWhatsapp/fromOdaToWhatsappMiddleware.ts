@@ -207,7 +207,7 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
                 const titleToShow = titleParts.length > 1 ? titleParts[1] : titleParts[0];
                 const shortenedTitle = titleToShow.length === 24 ? titleToShow.slice(0, -3) + "..." : titleToShow;
                 return {
-                  id: content.title,
+                  id: shortenedTitle,
                   title: shortenedTitle,
                   description: content.title
                 };
@@ -226,11 +226,9 @@ export async function handleBotResponse(req: Request, res: Response, next: NextF
                 if(shortenedTitle.length >= 24){
                   shortenedTitle = content.label.split(" ")[0]
                 }
-              //  let action = content.postback.action ? content.postback.action : content.label;
-                let action = content.postback.action || content.label;
-                console.log(action)
+             
                 return {
-                  id: action,
+                  id: content.label,
                   title: shortenedTitle,
                   description: content.label
                 };
