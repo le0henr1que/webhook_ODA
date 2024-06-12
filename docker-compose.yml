@@ -1,12 +1,29 @@
-# version: '3'
+version: "3"
+services:
+  node:
+    container_name: node
+    build: ./
+    restart: always
+    ports:
+      - 3000:3000
+    env_file:
+      - ./.env
 
-# services:
-#   app:
-#     build:
-#       context: .
-#       dockerfile: Dockerfile
-#     image: node-typescript-app
-#     container_name: node-typescript-app
-#     restart: always
-#     ports:
-#       - "3000:3000"
+  openssl:
+    build: ./openssl
+    volumes:
+      - ssl-certs:/certs
+
+  nginx:
+    container_name: nginx_app
+    build: ./nginx
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ssl-certs:/certs
+volumes:
+  postgres-volume:
+  react-volume:
+  ssl-certs:
