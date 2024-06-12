@@ -6,6 +6,7 @@ import OracleBot from "@oracle/bots-node-sdk";
 import { oracleRouter } from "./modules/Oracle-sdk";
 import { whatsappRouter } from "./modules/WhatsApp";
 import morgan from "morgan";
+import { health } from "./modules/health-check";
 
 const app = express();
 
@@ -14,6 +15,7 @@ app.use(morgan("dev"));
 OracleBot.init(app);
 app.use(cors(corsOptions));
 app.use(oracleRouter);
+app.use(health);
 app.use(whatsappRouter);
 app.use(errorMiddleware);
 
