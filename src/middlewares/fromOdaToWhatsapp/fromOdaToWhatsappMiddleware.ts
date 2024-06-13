@@ -45,8 +45,6 @@ export async function handleBotResponse(
           webhookExecutado = true;
         }
 
-        // const {phon_no_id, from, receivedMessage} = req.body
-
         async function sendMessage(payload: any) {
           return await axios.post(
             `https://graph.facebook.com/v16.0/${phon_no_id}/messages`,
@@ -60,7 +58,9 @@ export async function handleBotResponse(
           );
         }
 
-        // console.log("Received a message from ODA, processing message before sending to WhatsApp.");
+        console.log(
+          "Received a message from ODA, processing message before sending to WhatsApp."
+        );
         console.log(JSON.stringify(receivedMessage));
 
         let contentMessage: any = {
