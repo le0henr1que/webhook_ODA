@@ -48,7 +48,7 @@ export async function handleBotResponse(
         async function sendMessage(payload: any) {
           try {
             return await axios.post(
-              `https://graph.facebook.com/v16.0/${phon_no_id}/messages`,
+              `https://graph.facebook.com/v17.0/${phon_no_id}/messages`,
               payload,
               {
                 headers: {
