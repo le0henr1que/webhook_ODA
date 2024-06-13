@@ -46,16 +46,20 @@ export async function handleBotResponse(
         }
 
         async function sendMessage(payload: any) {
-          return await axios.post(
-            `https://graph.facebook.com/v16.0/${phon_no_id}/messages`,
-            payload,
-            {
-              headers: {
-                Authorization: `Bearer ${env.whatsappToken}`,
-                "Content-Type": "application/json",
-              },
-            }
-          );
+          try {
+            return await axios.post(
+              `https://graph.facebook.com/v16.0/${phon_no_id}/messages`,
+              payload,
+              {
+                headers: {
+                  Authorization: `Bearer ${env.whatsappToken}`,
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+          } catch (err) {
+            console.log(err);
+          }
         }
 
         console.log(
