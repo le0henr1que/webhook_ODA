@@ -12,6 +12,9 @@ import {
 
 const { WebhookClient, WebhookEvent } = OracleBot.Middleware;
 
+// Map to store user sessions
+const userSessions: { [key: string]: any } = {};
+
 export async function handleBotResponse(
   req: Request,
   res: Response,
@@ -19,6 +22,7 @@ export async function handleBotResponse(
 ) {
   const webhook: any = WebhookOracleSdk();
   let webhookExecutado = false;
+
   webhook
     .on(WebhookEvent.ERROR, (err: { message: any }) => {
       console.log("Webhook Error:", err.message);
@@ -38,11 +42,22 @@ export async function handleBotResponse(
           text: string;
         };
       }) => {
+        const userId = receivedMessage.number;
+        console.log(
+          "Received a message from ODA, processing message before sending to WhatsApp. UUSERID",
+          userId
+        );
+        if (!userSessions[userId]) {
+          userSessions[userId] = {
+            webhookExecutado: false,
+            messages: [],
+          };
+        }
+
+        const userSession = userSessions[userId];
+
         function delay(ms: number): Promise<void> {
           return new Promise((resolve) => setTimeout(resolve, ms));
-        }
-        if (!webhookExecutado) {
-          webhookExecutado = true;
         }
 
         async function sendMessage(payload: any) {
@@ -91,8 +106,7 @@ export async function handleBotResponse(
             receivedMessage.messagePayload.text;
 
           console.log(messageList);
-          // console.log("caiu dentro da build message com o array "+ JSON.stringify(contentMessage))
-          console.log(messageList);
+
           if (messageList.length == 0) {
             await sendMessage({
               messaging_product: "whatsapp",
@@ -103,36 +117,6 @@ export async function handleBotResponse(
             });
             return;
           }
-          // if(messageList.cards && !isList && listButton !== "list-for-wpp-list"){
-
-          //   await sendMessage({
-          //     messaging_product: "whatsapp",
-          //     to: from,
-          //     text: {
-          //       body: "Selecione um plano",
-          //     }
-          //   });
-
-          //   for (const content of messageList.cards) {
-          //   // console.log(messageList.cards)
-
-          //     // console.log("Caindo no for se for pra mostrar uma mensagem e um botão com o array " + JSON.stringify(contentMessage))
-          //     contentMessage.interactive.body.text = content.description
-          //     contentMessage.interactive.header = {}
-          //     contentMessage.interactive.header.type = "text"
-          //     contentMessage.interactive.header.text = content.title
-          //     contentMessage.interactive.type = "button"
-          //     contentMessage.interactive.action.buttons = [{}];
-          //     contentMessage.interactive.action.buttons[0] = {
-          //       type: "reply",
-          //       reply: { id: content.actions[0].label, title: "Selecionar plano" }
-          //     };
-          //     // console.log(contentMessage)
-          //     await sendMessage(contentMessage);
-          //     // console.log()
-          //   }
-          //   return
-          // }
 
           if (messageList.length > 3) {
             await sendMessage({
@@ -142,12 +126,8 @@ export async function handleBotResponse(
                 body: receivedMessage.messagePayload.text,
               },
             });
-            // console.log(messageList)
 
             for (const content of messageList) {
-              // console.log(messageList)
-
-              // console.log("Caindo no for se for pra mostrar uma mensagem e um botão com o array " + JSON.stringify(contentMessage))
               contentMessage.interactive.body.text = content;
               contentMessage.interactive.type = "button";
               contentMessage.interactive.action.buttons = [{}];
@@ -155,16 +135,11 @@ export async function handleBotResponse(
                 type: "reply",
                 reply: { id: content, title: "Selecionar" },
               };
-              // console.log(contentMessage)
               await sendMessage(contentMessage);
-              // console.log()
             }
             return;
           }
 
-          // if(listButton == "list-for-wpp-list" && isList && messageList.actions && messageList.actions.length <= 3){
-          // console.log(messageList)
-          // console.log("Caindo no list menor que três pra bostrar três botões com o array " + JSON.stringify(contentMessage))
           if (messageList.actions && messageList.actions.length <= 3) {
             contentMessage.interactive.body.text =
               receivedMessage.messagePayload.text;
@@ -218,11 +193,6 @@ export async function handleBotResponse(
               "-_________---___--_-_-_-"
             );
           }
-          // console.log(contentMessage)
-          // return sendMessage(contentMessage)
-          // }
-
-          // if(listButton == "list-for-wpp-list" && isList){
 
           if (messageList.cards && messageList.cards.length > 3) {
             contentMessage.interactive.type = "list";
@@ -311,9 +281,6 @@ export async function handleBotResponse(
           }
 
           return sendMessage(contentMessage);
-
-          // }
-          // return false
         }
 
         function errorMessage() {
@@ -333,7 +300,6 @@ export async function handleBotResponse(
           console.log(
             `Parece que ocorreu um erro ao enviar a mensagem de: ${from}`
           );
-          // console.log(JSON.stringify(contentMessage))
         }
 
         let valueForSending: any;
@@ -351,8 +317,6 @@ export async function handleBotResponse(
           valueForSending = [];
         }
 
-        // console.log()
-
         await buildPayloadWhatsapp(valueForSending, "list-for-wpp-list", true)
           .then(() => {
             console.log("Mensagem enviada com sucesso!!");
@@ -362,9 +326,9 @@ export async function handleBotResponse(
             console.log(err);
           });
 
-        if (!webhookExecutado) {
+        if (!userSession.webhookExecutado) {
           await delay(5000);
-          webhookExecutado = false;
+          userSession.webhookExecutado = false;
         }
       }
     );
