@@ -46,9 +46,9 @@ export async function handleBotResponse(
         const userId = receivedMessage.number;
         console.log(
           "Received a message from ODA, processing message before sending to WhatsApp. UUSERID",
-          userId
+          JSON.stringify(receivedMessage)
         );
-        sendLogToLogflare(receivedMessage);
+        sendLogToLogflare(JSON.stringify(receivedMessage));
 
         if (!userSessions[userId]) {
           userSessions[userId] = {
