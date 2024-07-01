@@ -9,6 +9,7 @@ import {
   from,
   phon_no_id,
 } from "../../modules/WhatsApp/useCase/fromWhatsappToOda/WebhookUseCase";
+import { sendLogToLogflare } from "../../shared/error/logflare";
 
 const { WebhookClient, WebhookEvent } = OracleBot.Middleware;
 
@@ -47,6 +48,8 @@ export async function handleBotResponse(
           "Received a message from ODA, processing message before sending to WhatsApp. UUSERID",
           userId
         );
+        sendLogToLogflare(receivedMessage);
+
         if (!userSessions[userId]) {
           userSessions[userId] = {
             webhookExecutado: false,
