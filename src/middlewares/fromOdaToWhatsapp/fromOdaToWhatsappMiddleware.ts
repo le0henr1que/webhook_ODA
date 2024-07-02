@@ -9,7 +9,6 @@ import {
   from,
   phon_no_id,
 } from "../../modules/WhatsApp/useCase/fromWhatsappToOda/WebhookUseCase";
-import { sendLogToLogflare } from "../../shared/error/logflare";
 
 const { WebhookClient, WebhookEvent } = OracleBot.Middleware;
 
