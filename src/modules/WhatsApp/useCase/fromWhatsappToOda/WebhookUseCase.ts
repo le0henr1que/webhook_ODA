@@ -56,7 +56,7 @@ export class WebhookUseCase {
     const MessageModel = webhook.MessageModel();
 
     const message = {
-      userId: "anonymous",
+      userId: from,
       profile: { firstName: userName, lastName: from },
       messagePayload: MessageModel.textConversationMessage(msg_body),
     };

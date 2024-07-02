@@ -14,7 +14,7 @@ import { sendLogToLogflare } from "../../shared/error/logflare";
 const { WebhookClient, WebhookEvent } = OracleBot.Middleware;
 
 // Map to store user sessions
-const userSessions: { [key: string]: any } = {};
+// const userSessions: { [key: string]: any } = {};
 
 export async function handleBotResponse(
   req: Request,
@@ -50,14 +50,14 @@ export async function handleBotResponse(
         );
         sendLogToLogflare(JSON.stringify(receivedMessage));
 
-        if (!userSessions[userId]) {
-          userSessions[userId] = {
-            webhookExecutado: false,
-            messages: [],
-          };
-        }
+        // if (!userSessions[userId]) {
+        //   userSessions[userId] = {
+        //     webhookExecutado: false,
+        //     messages: [],
+        //   };
+        // }
 
-        const userSession = userSessions[userId];
+        // const userSession = userSessions[userId];
 
         function delay(ms: number): Promise<void> {
           return new Promise((resolve) => setTimeout(resolve, ms));
@@ -329,10 +329,10 @@ export async function handleBotResponse(
             console.log(err);
           });
 
-        if (!userSession.webhookExecutado) {
-          await delay(5000);
-          userSession.webhookExecutado = false;
-        }
+        // if (!userSession.webhookExecutado) {
+        //   await delay(5000);
+        //   userSession.webhookExecutado = false;
+        // }
       }
     );
 
