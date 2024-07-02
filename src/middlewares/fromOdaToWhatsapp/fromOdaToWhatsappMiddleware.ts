@@ -42,22 +42,12 @@ export async function handleBotResponse(
           actions: any[];
           text: string;
         };
+        userId: string;
       }) => {
-        const userId = receivedMessage.number;
         console.log(
           "Received a message from ODA, processing message before sending to WhatsApp. UUSERID",
           JSON.stringify(receivedMessage)
         );
-        sendLogToLogflare(JSON.stringify(receivedMessage));
-
-        // if (!userSessions[userId]) {
-        //   userSessions[userId] = {
-        //     webhookExecutado: false,
-        //     messages: [],
-        //   };
-        // }
-
-        // const userSession = userSessions[userId];
 
         function delay(ms: number): Promise<void> {
           return new Promise((resolve) => setTimeout(resolve, ms));
@@ -87,7 +77,7 @@ export async function handleBotResponse(
 
         let contentMessage: any = {
           messaging_product: "whatsapp",
-          to: from,
+          to: receivedMessage?.userId,
         };
 
         let interactive: any = {
@@ -328,11 +318,6 @@ export async function handleBotResponse(
             errorMessage();
             console.log(err);
           });
-
-        // if (!userSession.webhookExecutado) {
-        //   await delay(5000);
-        //   userSession.webhookExecutado = false;
-        // }
       }
     );
 
