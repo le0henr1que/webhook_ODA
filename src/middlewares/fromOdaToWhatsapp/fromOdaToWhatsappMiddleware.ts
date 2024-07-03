@@ -6,7 +6,7 @@ import axios from "axios";
 import { WebhookOracleSdk } from "../../config/webhookConfig/index";
 import { json } from "body-parser";
 import {
-  from,
+  // from,
   phon_no_id,
 } from "../../modules/WhatsApp/useCase/fromWhatsappToOda/WebhookUseCase";
 
@@ -44,7 +44,7 @@ export async function handleBotResponse(
         userId: string;
       }) => {
         console.log(
-          "Received a message from ODA, processing message before sending to WhatsApp. UUSERID",
+          "Received a message from ODA, processing message before sending to WhatsApp.",
           JSON.stringify(receivedMessage)
         );
 
@@ -54,6 +54,7 @@ export async function handleBotResponse(
 
         async function sendMessage(payload: any) {
           try {
+            console.log("Payload enviado: ", JSON.stringify(payload));
             return await axios.post(
               `https://graph.facebook.com/v17.0/${phon_no_id}/messages`,
               payload,
@@ -81,7 +82,7 @@ export async function handleBotResponse(
 
         let interactive: any = {
           body: {
-            text: receivedMessage.messagePayload.text,
+            text: receivedMessage.messagePayload?.text,
           },
         };
 
@@ -102,7 +103,7 @@ export async function handleBotResponse(
           if (messageList.length == 0) {
             await sendMessage({
               messaging_product: "whatsapp",
-              to: from,
+              to: receivedMessage?.userId,
               text: {
                 body: contentMessage.interactive.body.text,
               },
@@ -113,7 +114,7 @@ export async function handleBotResponse(
           if (messageList.length > 3) {
             await sendMessage({
               messaging_product: "whatsapp",
-              to: from,
+              to: receivedMessage?.userId,
               text: {
                 body: receivedMessage.messagePayload.text,
               },
@@ -161,32 +162,35 @@ export async function handleBotResponse(
                 };
               });
           }
-          if (messageList.cards && messageList.cards.length <= 3) {
-            console.log(
-              "Caindo no list menor que três pra bostrar três botões com o array " +
-                JSON.stringify(contentMessage)
-            );
-            contentMessage.interactive.body.text =
-              receivedMessage.messagePayload.text;
-            contentMessage.interactive.type = "button";
-            console.log(messageList.cards, "cards");
-            console.log(messageList, "messageList");
-            //DESCOMENTAR ISSO AQUI
-            // contentMessage.interactive.action.buttons = messageList.cards.map(
-            //   (content: any) => {
-            //     return {
-            //       type: "reply",
-            //       reply: { id: content.label, title: content.label },
-            //     };
-            //   }
-            // );
-            console.log(
-              contentMessage.interactive.action.buttons,
-              "-_________---___--_-_-_-"
-            );
-          }
+          // if (messageList.cards && messageList.cards.length <= 3) {
+          //   console.log(
+          //     "Caindo no list menor que três pra bostrar três botões com o array " +
+          //       JSON.stringify(contentMessage)
+          //   );
+          //   contentMessage.interactive.body.text =
+          //     receivedMessage.messagePayload.text || "Selecione uma opção";
+          //   contentMessage.interactive.type = "button";
+          //   console.log(messageList.cards, "cards");
+          //   console.log(messageList, "messageList");
+          //   //DESCOMENTAR ISSO AQUI
+          //   contentMessage.interactive.action.buttons = messageList.cards.map(
+          //     (content: any) => {
+          //       return {
+          //         type: "reply",
+          //         reply: {
+          //           id: content?.actions[0].postback.action,
+          //           title: content?.title,
+          //         },
+          //       };
+          //     }
+          //   );
+          //   console.log(
+          //     contentMessage.interactive.action.buttons,
+          //     "-_________---___--_-_-_-"
+          //   );
+          // }
 
-          if (messageList.cards && messageList.cards.length > 3) {
+          if (messageList.cards) {
             contentMessage.interactive.type = "list";
             contentMessage.interactive.action.button = "Selecione uma opção";
             interactive.action.sections = [{}];
@@ -290,7 +294,7 @@ export async function handleBotResponse(
           ];
           sendMessage(contentMessage);
           console.log(
-            `Parece que ocorreu um erro ao enviar a mensagem de: ${from}`
+            `Parece que ocorreu um erro ao enviar a mensagem de: ${receivedMessage?.userId}`
           );
         }
 
