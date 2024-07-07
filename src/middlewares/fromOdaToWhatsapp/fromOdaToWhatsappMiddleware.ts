@@ -176,7 +176,7 @@ export async function handleBotResponse(
                   shortenedTitle = shortenedTitle.slice(0, 21) + "...";
                 }
                 return {
-                  id: shortenedTitle,
+                  id: content.postback.action,
                   title: shortenedTitle,
                   description: content.title,
                 };
