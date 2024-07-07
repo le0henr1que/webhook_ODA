@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { resolver } from "../../shared/error/appError";
-import { verifyCallbackController } from "./useCase/verifySubscription";
 import { processWebhookController } from "./useCase/fromWhatsappToOda";
+import { verifyCallbackController } from "./useCase/verifySubscription";
 
 const whatsappRouter = Router();
 

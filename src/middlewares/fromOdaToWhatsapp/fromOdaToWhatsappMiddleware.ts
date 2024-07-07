@@ -5,15 +5,9 @@ import { Request, Response, NextFunction } from "express";
 import axios from "axios";
 import { WebhookOracleSdk } from "../../config/webhookConfig/index";
 import { json } from "body-parser";
-import {
-  // from,
-  phon_no_id,
-} from "../../modules/WhatsApp/useCase/fromWhatsappToOda/WebhookUseCase";
+import { phon_no_id } from "../../modules/WhatsApp/useCase/fromWhatsappToOda/WebhookUseCase";
 
 const { WebhookClient, WebhookEvent } = OracleBot.Middleware;
-
-// Map to store user sessions
-// const userSessions: { [key: string]: any } = {};
 
 export async function handleBotResponse(
   req: Request,
@@ -141,7 +135,7 @@ export async function handleBotResponse(
               (content: any) => {
                 return {
                   type: "reply",
-                  reply: { id: content.label, title: content.label },
+                  reply: { id: content.postback.action, title: content.label },
                 };
               }
             );
@@ -162,33 +156,6 @@ export async function handleBotResponse(
                 };
               });
           }
-          // if (messageList.cards && messageList.cards.length <= 3) {
-          //   console.log(
-          //     "Caindo no list menor que três pra bostrar três botões com o array " +
-          //       JSON.stringify(contentMessage)
-          //   );
-          //   contentMessage.interactive.body.text =
-          //     receivedMessage.messagePayload.text || "Selecione uma opção";
-          //   contentMessage.interactive.type = "button";
-          //   console.log(messageList.cards, "cards");
-          //   console.log(messageList, "messageList");
-          //   //DESCOMENTAR ISSO AQUI
-          //   contentMessage.interactive.action.buttons = messageList.cards.map(
-          //     (content: any) => {
-          //       return {
-          //         type: "reply",
-          //         reply: {
-          //           id: content?.actions[0].postback.action,
-          //           title: content?.title,
-          //         },
-          //       };
-          //     }
-          //   );
-          //   console.log(
-          //     contentMessage.interactive.action.buttons,
-          //     "-_________---___--_-_-_-"
-          //   );
-          // }
 
           if (messageList.cards) {
             contentMessage.interactive.type = "list";
@@ -239,7 +206,7 @@ export async function handleBotResponse(
                 }
 
                 return {
-                  id: content.label,
+                  id: content.postback.action,
                   title: shortenedTitle,
                   description: content.label,
                 };
