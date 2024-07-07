@@ -135,7 +135,7 @@ export async function handleBotResponse(
               (content: any) => {
                 return {
                   type: "reply",
-                  reply: { id: content.postback.action, title: content.label },
+                  reply: { id: content.label, title: content.label },
                 };
               }
             );
@@ -176,7 +176,7 @@ export async function handleBotResponse(
                   shortenedTitle = shortenedTitle.slice(0, 21) + "...";
                 }
                 return {
-                  id: content.postback.action,
+                  id: shortenedTitle,
                   title: shortenedTitle,
                   description: content.title,
                 };
@@ -206,7 +206,7 @@ export async function handleBotResponse(
                 }
 
                 return {
-                  id: content.postback.action,
+                  id: content.label,
                   title: shortenedTitle,
                   description: content.label,
                 };
