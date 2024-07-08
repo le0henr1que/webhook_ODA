@@ -128,6 +128,9 @@ export async function handleBotResponse(
           }
 
           if (messageList.actions && messageList.actions.length <= 3) {
+            console.log(
+              "messageList.actions && messageList.actions.length <= 3"
+            );
             contentMessage.interactive.body.text =
               receivedMessage.messagePayload.text;
             contentMessage.interactive.type = "button";
@@ -145,6 +148,9 @@ export async function handleBotResponse(
             messageList.globalActions &&
             messageList.globalActions.length <= 3
           ) {
+            console.log(
+              " messageList.globalActions && messageList.globalActions.length <= 3"
+            );
             contentMessage.interactive.body.text =
               receivedMessage.messagePayload.text;
             contentMessage.interactive.type = "button";
@@ -158,6 +164,7 @@ export async function handleBotResponse(
           }
 
           if (messageList.cards) {
+            console.log("if (messageList.cards) ");
             contentMessage.interactive.type = "list";
             contentMessage.interactive.action.button = "Selecione uma opção";
             interactive.action.sections = [{}];
@@ -184,6 +191,9 @@ export async function handleBotResponse(
             );
           }
           if (messageList.actions && messageList.actions.length > 3) {
+            console.log(
+              "messageList.actions && messageList.actions.length > 3"
+            );
             contentMessage.interactive.type = "list";
             contentMessage.interactive.action.button = "Selecione uma opção";
             interactive.action.sections = [{}];
@@ -217,6 +227,9 @@ export async function handleBotResponse(
             messageList.globalActions &&
             messageList.globalActions.length > 3
           ) {
+            console.log(
+              "messageList.globalActions && messageList.globalActions.length > 3"
+            );
             contentMessage.interactive.type = "list";
             contentMessage.interactive.action.button = "Selecione uma opção";
             interactive.action.sections = [{}];
