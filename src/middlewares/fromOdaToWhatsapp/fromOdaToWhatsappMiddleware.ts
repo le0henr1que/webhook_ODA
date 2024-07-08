@@ -53,7 +53,7 @@ export async function handleBotResponse(
               `https://graph.facebook.com/v17.0/${phon_no_id}/messages`,
               {
                 ...payload,
-                metadata: { ...receivedMessage.messagePayload },
+                metadata: { ...receivedMessage.messagePayload, teste: "teste" },
               },
               {
                 headers: {
