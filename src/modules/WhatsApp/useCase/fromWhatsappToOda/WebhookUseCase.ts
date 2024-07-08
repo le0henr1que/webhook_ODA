@@ -60,7 +60,7 @@ export class WebhookUseCase {
       profile: { firstName: userName, lastName: from },
       messagePayload: {
         ...MessageModel.textConversationMessage(msg_body),
-        action: "1a Via", // Ação específica
+        action: "2a Via", // Ação específica
         variables: {
           // Variáveis específicas
           cardsMenuChoice: "1397652",
