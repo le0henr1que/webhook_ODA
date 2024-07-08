@@ -22,7 +22,11 @@ export class WebhookUseCase {
 
     phon_no_id = payload.entry[0].changes[0].value.metadata.phone_number_id;
     console.log(phon_no_id);
-    console.log(payload, JSON.stringify(payload));
+    console.log("AQUI É O JSON DO WEBHOOK", JSON.stringify(payload));
+    console.log(
+      "AQUI É O JSON DO WEBHOOK",
+      JSON.stringify(payload.entry[0].changes[0].value.metadata)
+    );
     const from = payload.entry[0].changes[0].value.messages[0].from;
 
     let msg_body = "";
