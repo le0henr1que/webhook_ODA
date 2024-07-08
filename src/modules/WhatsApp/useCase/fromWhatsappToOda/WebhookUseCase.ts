@@ -22,9 +22,8 @@ export class WebhookUseCase {
 
     phon_no_id = payload.entry[0].changes[0].value.metadata.phone_number_id;
     console.log(phon_no_id);
-    console.log(payload);
-    const from = payload.entry[0].changes[0].value.messages[0].from;
     console.log(payload, JSON.stringify(payload));
+    const from = payload.entry[0].changes[0].value.messages[0].from;
 
     let msg_body = "";
     let userName = payload.entry[0].changes[0].value.contacts[0].profile.name;
@@ -55,7 +54,7 @@ export class WebhookUseCase {
 
     //Sending Message from Whats app to ODA
     const MessageModel = webhook.MessageModel();
-    // 1397652;
+
     const message = {
       userId: from,
       profile: { firstName: userName, lastName: from },
