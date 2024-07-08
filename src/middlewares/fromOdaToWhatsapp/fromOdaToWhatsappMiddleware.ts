@@ -174,6 +174,7 @@ export async function handleBotResponse(
               .messagePayload.text
               ? "Este campo permite que você escolha uma das opções disponíveis. Clique aqui para ver as alternativas e fazer sua seleção."
               : receivedMessage.messagePayload.text;
+
             interactive.action.sections[0].rows = messageList.cards.map(
               (content: any) => {
                 const titleParts = content.title.split(" - ");
