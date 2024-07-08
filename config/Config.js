@@ -15,7 +15,7 @@ exports.PHONE_NUMBER_ID = process.env.PHONE_NUMBER_ID || "114541121694377";
 exports.LIST_TITLE_DEFAULT_LABEL = "Selecionar um(a)";
 
 // General Detail
-exports.port = process.env.port || 8004;
+exports.port = process.env.port || 3000;
 exports.FILES_URL = "https://webhookoda-production.up.railway.app"; //your app server url
 exports.LOG_LEVEL = "info";
 
