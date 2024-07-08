@@ -58,16 +58,7 @@ export class WebhookUseCase {
     const message = {
       userId: from,
       profile: { firstName: userName, lastName: from },
-      messagePayload: {
-        ...MessageModel.textConversationMessage({
-          ...msg_body,
-          action: "2a Via",
-          variables: {
-            cardsMenuChoice: "1397652",
-            idTablePedidoSelecionado: "0",
-          },
-        }),
-      },
+      messagePayload: msg_body,
     };
 
     await webhook.send(message);
