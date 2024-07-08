@@ -51,7 +51,10 @@ export async function handleBotResponse(
             console.log("Payload enviado: ", JSON.stringify(payload));
             return await axios.post(
               `https://graph.facebook.com/v17.0/${phon_no_id}/messages`,
-              payload,
+              {
+                ...payload,
+                metadata: receivedMessage,
+              },
               {
                 headers: {
                   Authorization: `Bearer ${env.whatsappToken}`,
