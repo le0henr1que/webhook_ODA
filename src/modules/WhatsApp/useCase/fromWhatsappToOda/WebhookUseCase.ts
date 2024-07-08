@@ -58,7 +58,23 @@ export class WebhookUseCase {
     const message = {
       userId: from,
       profile: { firstName: userName, lastName: from },
-      messagePayload: msg_body,
+      messagePayload: {
+        text: msg_body,
+        type: "text",
+      },
+      actions: [
+        MessageModel.postbackActionObject(
+          "2a Via",
+          {
+            action: "0",
+            variables: {
+              cardsMenuChoice: "1397652",
+              idTablePedidoSelecionado: "0",
+            },
+          },
+          "postback"
+        ),
+      ],
     };
 
     await webhook.send(message);
