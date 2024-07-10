@@ -13,6 +13,8 @@ export async function handleBotResponse(
   req: Request,
   res: Response,
   next: NextFunction
+  // req: Request,
+  // res: Response
 ) {
   const webhook: any = WebhookOracleSdk();
   let webhookExecutado = false;
@@ -39,8 +41,9 @@ export async function handleBotResponse(
       }) => {
         console.log(
           "Received a message from ODA, processing message before sending to WhatsApp.",
-          JSON.stringify(receivedMessage)
+          JSON.stringify(req.body)
         );
+        // const receivedMessage = req.body;
 
         function delay(ms: number): Promise<void> {
           return new Promise((resolve) => setTimeout(resolve, ms));
@@ -51,9 +54,10 @@ export async function handleBotResponse(
             console.log("Payload enviado: ", JSON.stringify(payload));
             return await axios.post(
               `https://graph.facebook.com/v17.0/${phon_no_id}/messages`,
+              // `https://graph.facebook.com/v17.0/114541121694377/messages`,
               {
                 ...payload,
-                metadata: { ...receivedMessage.messagePayload, teste: "teste" },
+                metadata: { ...receivedMessage.messagePayload },
               },
               {
                 headers: {
@@ -193,6 +197,32 @@ export async function handleBotResponse(
                 };
               }
             );
+          }
+          if (messageList.cards && messageList.cards.length === 1) {
+            console.log("messageList.cards && messageList.cards.length === 1");
+            contentMessage.interactive.type = "list";
+            contentMessage.interactive.action.button = "Selecione uma opção";
+            interactive.action.sections = [{}];
+            interactive.action.sections[0].title = "";
+            contentMessage.interactive.body.text = !receivedMessage
+              .messagePayload.text
+              ? "Este campo permite que você escolha uma das opções disponíveis. Clique aqui para ver as alternativas e fazer sua seleção."
+              : receivedMessage.messagePayload.text;
+            interactive.action.sections[0].rows =
+              messageList.cards[0].actions.map((content: any) => {
+                const titleParts = content.label.split(" - ");
+                const titleToShow =
+                  titleParts.length > 1 ? titleParts[1] : titleParts[0];
+                let shortenedTitle = titleToShow;
+                if (shortenedTitle.length > 24) {
+                  shortenedTitle = shortenedTitle.slice(0, 21) + "...";
+                }
+                return {
+                  id: shortenedTitle,
+                  title: shortenedTitle,
+                  description: content.label,
+                };
+              });
           }
           if (messageList.actions && messageList.actions.length > 3) {
             console.log(

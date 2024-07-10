@@ -8,9 +8,8 @@ oracleRouter.post("/bot/message", handleBotResponse);
 
 oracleRouter.post(
   "/simulator/bot/message",
-  handleBotResponse,
   (request: Request, response: Response) => {
-    response.send("message send");
+    handleBotResponse(request, response);
   }
 );
 
