@@ -11,6 +11,7 @@ oracleRouter.post(
   (request: Request, response: Response) => {
     // handleBotResponse(request, response);
     console.log("Simulator Bot Message");
+    console.log("Simulator Bot Message");
   }
 );
 
