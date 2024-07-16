@@ -5,7 +5,7 @@ export class VerifyCallbackUseCase {
   async execute(callbackApiSide: callbackFromApiSide): Promise<boolean> {
     const { mode, token } = callbackApiSide;
     const myToken = env.myTokenWhatsapp;
-  
+
     if (!mode) return false;
     if (!token) return false;
     if (!myToken) return false;
