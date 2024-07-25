@@ -181,7 +181,7 @@ export async function handleBotResponse(
                 };
               });
           }
-          if (messageList.cards) {
+          if (messageList.cards && messageList.cards.length > 1) {
             contentMessage.interactive.type = "list";
             contentMessage.interactive.action.button = "Selecione uma opção";
             interactive.action.sections = [{}];
