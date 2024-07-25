@@ -164,27 +164,8 @@ export async function handleBotResponse(
               .messagePayload.text
               ? "Este campo permite que você escolha uma das opções disponíveis. Clique aqui para ver as alternativas e fazer sua seleção."
               : receivedMessage.messagePayload.text;
-
             interactive.action.sections[0].rows = messageList.cards.map(
               (content: any) => {
-                if (
-                  messageList.cards.length === 1 &&
-                  content.actions.length > 1
-                ) {
-                  const titleParts = content.label.split(" - ");
-                  const titleToShow =
-                    titleParts.length > 1 ? titleParts[1] : titleParts[0];
-                  let shortenedTitle = titleToShow;
-                  if (shortenedTitle.length > 24) {
-                    shortenedTitle = shortenedTitle.slice(0, 21) + "...";
-                  }
-                  return {
-                    id: shortenedTitle,
-                    title: shortenedTitle,
-                    description: content.label,
-                  };
-                }
-
                 const titleParts = content.title.split(" - ");
                 const titleToShow =
                   titleParts.length > 1 ? titleParts[1] : titleParts[0];
